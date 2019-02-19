@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/12 06:32:27 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/19 00:48:27 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,6 @@
 int		find_var(void *data, void *to_find)
 {
 	return (ft_strequ(((t_env *)data)->name, (char *)to_find));
-}
-
-char	*get_env_var(t_list *lst, char *name)
-{
-	t_env	*tmp;
-
-	while (lst)
-	{
-		tmp = (t_env *)lst->data;
-		if (ft_strequ(tmp->name, name))
-			return (tmp->data);
-		lst = lst->next;
-	}
-	return (NULL);
 }
 
 int		echo(t_tab *args)
@@ -46,7 +32,7 @@ int		echo(t_tab *args)
 		i++;
 	}
 	while (i < args->ac && args->av[i])
-		ft_printf("%s ", args->av[i++]);	
+		ft_printf("%s ", args->av[i++]);
 	if (!n)
 		ft_putchar('\n');
 	return (0);
@@ -65,9 +51,8 @@ int		change_directory(t_prgm *glob, t_tab *args)
 	if ((current = opendir(path)))
 	{
 		chdir(args->av[1]);
-		set_env(glob, "OLDPWD", get_env_var(glob->env, "PWD"));
-		set_env(glob, "PWD", path);
-		get_prompt(glob);
+		ft_setenv(glob, "OLDPWD", ft_getenv(glob->env, "PWD"));
+		ft_setenv(glob, "PWD", path);
 		closedir(current);
 		return (0);
 	}
@@ -81,18 +66,18 @@ int		builtin(t_prgm *glob, t_tab *args)
 
 	res = 0;
 	if (ft_strequ(args->av[0], "setenv") && (args->ac == 2 || args->ac == 3))
-		res = set_env(glob, args->av[1], args->av[2]);
+		res = ft_setenv(glob, args->av[1], args->av[2]);
 	else if (ft_strequ(args->av[0], "exit"))
 		exit(0);
-	else if(ft_strequ(args->av[0], "env"))
+	else if (ft_strequ(args->av[0], "env"))
 		ft_lstiter(glob->env, print_env);
 	else if (ft_strequ(args->av[0], "unsetenv") && args->ac == 2)
-		res = !ft_lstremove_if(&glob->env, args->av[1], find_var, del_env);
+		res = !ft_lstremove_if (&glob->env, args->av[1], find_var, delenv);
 	else if (ft_strequ(args->av[0], "echo"))
 		res = echo(args);
 	else if (ft_strequ(args->av[0], "cd"))
 		res = change_directory(glob, args);
 	else if (ft_strequ(args->av[0], "pwd") || ft_strequ(args->av[0], "PWD"))
-		res = ft_printf("%s\n", get_env_var(glob->env, "PWD")) > 0 ? 0 : -1;
+		res = ft_printf("%s\n", ft_getenv(glob->env, "PWD")) > 0 ? 0 : -1;
 	return (res == 0 ? 1 : res);
 }

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/12 05:51:23 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/19 00:48:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "libft.h"
 # include "ft_printf.h"
-# define DIR_MAX 512
+# define DIR_MAX 1024
 
 typedef struct 		s_env
 {
@@ -35,17 +35,20 @@ typedef struct		s_prgm
 	t_list			*args;
 	t_list			*env;
 	char			*line;
-	char			*prompt;
+	char			**av;
+	int				ac;
 	unsigned long	error;
 }					t_prgm;
 
-int					get_env(t_prgm *glob, char **env);
-int					set_env(t_prgm *glob, char *name, char *data);
-void				get_prompt(t_prgm *glob);
+int					envsetup(t_prgm *glob, char **env);
+char				*ft_getenv(t_list *lst, char *name);
+int					ft_setenv(t_prgm *glob, char *name, char *data);
 void				print_env(t_list *node);
-int					unset_env(t_prgm *glob, char *name);
-void				del_env(void *data);
+void				delenv(void *data);
 
 int					builtin(t_prgm *glob, t_tab *args);
 int					echo(t_tab *args);
+
+t_list				*generate_path(t_prgm *glob);
+void				print_exec(t_list *node);
 #endif

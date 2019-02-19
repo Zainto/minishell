@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/12 06:06:51 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/19 00:46:01 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	parser(char const *str)
 		return (0);
 	if (ft_strchr("\"\'", *str))
 	{
-		if(*str == '\"')
+		if (*str == '\"')
 			str += ft_strcspn(str + 1, "\"");
 		else
 			str += ft_strcspn(str + 1, "\'");
@@ -47,7 +47,7 @@ static int	writer(char const *str, char ***tab, int word)
 		return (1);
 	if (ft_strchr("\"\'", *str))
 	{
-		if(*str == '\"')
+		if (*str == '\"')
 			i = ft_strcspn(str + 1, "\"");
 		else
 			i = ft_strcspn(str + 1, "\'");
@@ -88,26 +88,29 @@ void		destructor(t_prgm *glob, t_tab *args)
 	args = NULL;
 }
 
-int		main(int ac, char **av, char **env)
+int			main(int ac, char **av, char **env)
 {
 	t_prgm		glob;
+	//t_list		*exec;
 	t_tab		*args;
 	int			status;
 
 	ft_bzero(&glob, sizeof(t_prgm));
 	glob.args = ft_getargslst(ac, av);
-	get_env(&glob, env);
+	envsetup(&glob, env);
 	status = 1;
-	while (status == 1)	
+	while (status == 1)
 	{
-		ft_printf("[%s] ", !*glob.prompt ? "/" : glob.prompt);
+		ft_putstr("> : ");
 		status = ft_getdelim(0, &glob.line, '\n');
 		args = split_input(glob.line);
 		status = builtin(&glob, args);
 		destructor(&glob, args);
+		//exec = generate_path(&glob);
+		//ft_lstiter(exec, print_exec);
 		if (status == -1)
 		{
-			ft_printf("An error occured\n");	
+			ft_printf("An error occured\n");
 			status = 1;
 		}
 	}

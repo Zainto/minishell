@@ -6,33 +6,27 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/12 06:10:22 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/19 00:48:50 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_prompt(t_prgm *glob)
+char	*ft_getenv(t_list *lst, char *name)
 {
-	t_list	*env;
 	t_env	*tmp;
 
-	env = glob->env;
-	if (glob->prompt)
-		ft_strdel(&glob->prompt);
-	while(env)
+	while (lst)
 	{
-		tmp = (t_env *)env->data;	
-		if (ft_strequ(tmp->name, "PWD"))
-		{
-			glob->prompt = ft_strdup(ft_strrchr(tmp->data, '/') + 1);	
-			break;
-		}
-		env = env->next;
+		tmp = (t_env *)lst->data;
+		if (ft_strequ(tmp->name, name))
+			return (tmp->data);
+		lst = lst->next;
 	}
+	return (NULL);
 }
 
-int		set_env(t_prgm *glob, char *name, char *data)
+int		ft_setenv(t_prgm *glob, char *name, char *data)
 {
 	t_list	*node;
 	t_env	*tmp;
@@ -50,7 +44,7 @@ int		set_env(t_prgm *glob, char *name, char *data)
 			tmp->data = ft_strdup(data);
 			return (0);
 		}
-		node = node->next;	
+		node = node->next;
 	}
 	template.name = ft_strdup(name);
 	template.data = ft_strdup(data);
@@ -59,18 +53,18 @@ int		set_env(t_prgm *glob, char *name, char *data)
 	return (0);
 }
 
-void	del_env(void *data)
+void	delenv(void *data)
 {
 	t_env	*tmp;
 
 	tmp = (t_env *)data;
-	if(tmp->name)
+	if (tmp->name)
 		ft_strdel(&tmp->name);
 	if (tmp->data)
 		ft_strdel(&tmp->data);
 }
 
-int		get_env(t_prgm *glob, char **env)
+int		envsetup(t_prgm *glob, char **env)
 {
 	t_list	*node;
 	t_env	variable;
@@ -87,7 +81,6 @@ int		get_env(t_prgm *glob, char **env)
 		ft_lstaddback(&glob->env, node);
 		i++;
 	}
-	get_prompt(glob);
 	return (0);
 }
 
