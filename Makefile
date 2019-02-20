@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/19 01:00:32 by cempassi         ###   ########.fr        #
+#    Updated: 2019/02/20 08:05:22 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,17 +36,25 @@ IPATH = includes/
 LPATH = libft/
 LIPATH = libft/includes/
 
-SRCS += main.c
+INCS += minishell.h
+INCT += unit.h
+
+SRCM += main.c
+
 SRCS += env.c
-SRCS += builtin.c
+SRCS += init.c
+#SRCS += builtin.c
 SRCS += path.c
 
 TEST += unit.c
-TEST += tests.c
-INCS += minishell.h
-INCT += unit.h
+TEST += test_envinit.c
+TEST += test_execinit.c
+TEST += test_ft_getenv.c
+TEST += test_get_path.c
+
 DSYM = $(NAME).dSYM
 
+OBJM = $(patsubst %.c, $(OPATH)%.o, $(SRCM))
 OBJS = $(patsubst %.c, $(OPATH)%.o, $(SRCS))
 OBJD = $(patsubst %.c, $(OPATH)db%.o, $(SRCS))
 OBJT = $(patsubst %.c, $(OPATH)%.o, $(TEST))
@@ -60,7 +68,7 @@ all : $(NAME)
 run : $(NAME)
 	./$<
 	
-test: $(UNIT)
+test: $(NAMET)
 	./$<
 
 debug : $(NAMEDB)
@@ -68,14 +76,17 @@ debug : $(NAMEDB)
 
 #Normal compilation
 
-$(NAME): $(LIB) $(OPATH) $(OBJS) $(INCS)
-	$(CC) -o $@ $(LIB) $(OBJS)
+$(NAME): $(LIB) $(OPATH) $(OBJM) $(OBJS) $(INCS)
+	$(CC) -o $@ $(LIB) $(OBJS) $(OBJM)
 	
 $(OBJS) : $(OPATH)%.o : %.c $(INCS)
 	$(COMPILE) $(CFLAGS) $(IFLAGS) $< -o $@
 
+$(OBJM) : $(OPATH)%.o : %.c $(INCS)
+	$(COMPILE) $(CFLAGS) $(IFLAGS) $< -o $@
+
 #Unit testing
-$(UNIT): $(LIB) $(OPATH) $(OBJS) $(OBJT)
+$(NAMET): $(LIB) $(OPATH) $(OBJS) $(OBJT)
 	$(CC) -o $@ $(OBJS) $(LIB) $(OBJT)
 
 $(OBJT) : $(OPATH)%.o : %.c $(INCT)
@@ -114,4 +125,5 @@ re: fclean all
 
 FORCE :
 
-.PHONY: all clean fclean debug FORCE
+.PHONY: all clean fclean debug test FORCE
+.SILENT:

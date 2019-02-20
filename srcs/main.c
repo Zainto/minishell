@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/19 00:46:01 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/20 08:24:16 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,28 +91,7 @@ void		destructor(t_prgm *glob, t_tab *args)
 int			main(int ac, char **av, char **env)
 {
 	t_prgm		glob;
-	//t_list		*exec;
-	t_tab		*args;
-	int			status;
 
-	ft_bzero(&glob, sizeof(t_prgm));
-	glob.args = ft_getargslst(ac, av);
-	envsetup(&glob, env);
-	status = 1;
-	while (status == 1)
-	{
-		ft_putstr("> : ");
-		status = ft_getdelim(0, &glob.line, '\n');
-		args = split_input(glob.line);
-		status = builtin(&glob, args);
-		destructor(&glob, args);
-		//exec = generate_path(&glob);
-		//ft_lstiter(exec, print_exec);
-		if (status == -1)
-		{
-			ft_printf("An error occured\n");
-			status = 1;
-		}
-	}
+	init_minishell(&glob, ac, av, env);
 	return (0);
 }
