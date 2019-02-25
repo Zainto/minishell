@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_execinit.c                                    :+:      :+:    :+:   */
+/*   test_generate_exec.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/20 02:39:31 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 04:27:53 by cempassi         ###   ########.fr       */
+/*   Created: 2019/02/21 20:40:50 by cempassi          #+#    #+#             */
+/*   Updated: 2019/02/21 21:15:16 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unit.h"
-#include <fcntl.h>
 
-int		GenerateExecList(void)
+static int		NullPathArgument(void)
 {
-	t_prgm	glob;
-
-	glob_test_init(&glob);
-	if(execinit(&glob) == 0)
-	{
-		glob_test_destructor(&glob);
+	if (generate_exec(NULL, NULL) == NULL_ARG)
 		return (ISTRUE);
-	}
-	return (ISFALSE);
+	else
+		return (ISFALSE);
 }
 
-int		test_execinit(void)
+static int		InvalidPath(void)
+{
+	t_prgm		glob;
+
+
+	if (generate_exec(&glob, "::::") == FAILED_MALLOC)
+		return (ISTRUE);
+	return (ISFALSE);
+}
+int		test_generate_exec(void)
 {
 	t_stack tests;
 
 	ft_stckinit(&tests);
-	ft_printf("%@s: \n", "39", "EXECINIT");
-	load_test(&tests,"Generate Full Executable List", GenerateExecList);
+	ft_printf("%@s: \n", "39", "GENERATE EXEC");
+	load_test(&tests,"Invalid path argument", InvalidPath);
+	load_test(&tests,"Null path argument", NullPathArgument);
 	return (run_test(&tests));
 }

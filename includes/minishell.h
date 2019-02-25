@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/20 07:47:39 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 11:07:38 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,27 @@
 # define FAILED_MALLOC -2
 # define FAILED_OPEN -3
 # define FAILED_CLOSE -4
+# define UNCLOSED_COMMA -5
+# define FAILED_READ -6
+# define TOO_FEW_ARGS -7
+# define WRONG_CD_ARGS -7
 # define DEFAULT_PATH "/etc/paths"
 
-typedef struct 		s_env
+
+typedef struct	s_prgm	t_prgm;
+
+typedef struct		s_builtin
+{
+	char	*name;
+	int		(*builtin)(t_prgm *);
+}					t_builtin;
+
+typedef struct 		s_variable
 {
 	char	*name;
 	char	*data;
-}					t_env;
+}					t_variable;
+
 
 typedef struct		s_tab
 {
@@ -40,32 +54,41 @@ typedef enum		e_error
 	E_FAILED_MALLOC = FAILED_MALLOC,
 	E_FAILED_OPEN = FAILED_OPEN,
 	E_FAILED_CLOSE = FAILED_CLOSE,
+	E_UNCLOSED_COMMA = UNCLOSED_COMMA,
+	E_FAILED_READ = FAILED_READ,
+	E_TOO_FEW_ARGS = TOO_FEW_ARGS,
+	E_WRONG_CD_ARGS = WRONG_CD_ARGS,
 }					t_error;
 
-typedef struct		s_prgm
+struct 				s_prgm
 {
-	t_list			*args;
 	t_list			*env;
 	t_list			*exec;
-	t_tab			*tab;
+	t_builtin		builtin[6];
+	t_tab			tab;
 	char			*line;
-	char			**av;
-	int				ac;
+	int				status;
 	t_error			error;
-}					t_prgm;
+};
 
-void				init_minishell(t_prgm *glob, int ac, char **av, char **env);
+
+int					initialization(t_prgm *glob, char **env);
 int					execinit(t_prgm *glob);
+char				*read_path(t_prgm *glob);
+int					get_exec(t_prgm *glob, char *path);
 int					envinit(t_prgm *glob, char **env);
-char				*ft_getenv(t_prgm *glob, char *name);
-int					ft_setenv(t_prgm *glob, char *name, char *data);
+char				*ms_getenv(t_prgm *glob, char *name);
+void				variable_delete(void *data);
+int					ms_setenv(t_prgm *glob);
 void				print_env(t_list *node);
-void				delenv(void *data);
+int					ms_unsetenv(t_prgm *glob);
 
-int					builtin(t_prgm *glob, t_tab *args);
-int					echo(t_tab *args);
+int					process_line(t_prgm *glob);
+int					split_input(t_prgm *glob);
+int					builtins_exec(t_prgm *glob);
+int					echo(t_prgm *glob);
+int					launcher(t_prgm *glob);
 
-char				*get_path(t_prgm *glob);
-t_list				*generate_path(t_prgm *glob);
+int					generate_exec(t_prgm *glob, char *path);
 void				print_exec(t_list *node);
 #endif

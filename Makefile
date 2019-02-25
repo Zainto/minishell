@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/20 08:05:22 by cempassi         ###   ########.fr        #
+#    Updated: 2019/02/25 11:10:03 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,14 +43,20 @@ SRCM += main.c
 
 SRCS += env.c
 SRCS += init.c
-#SRCS += builtin.c
-SRCS += path.c
+SRCS += read_path.c
+SRCS += exec.c
+SRCS += process_line.c
+SRCS += builtin.c
+SRCS += launcher.c
 
 TEST += unit.c
 TEST += test_envinit.c
 TEST += test_execinit.c
 TEST += test_ft_getenv.c
 TEST += test_get_path.c
+TEST += test_generate_exec.c
+TEST += test_get_exec.c
+TEST += test_line_processing.c
 
 DSYM = $(NAME).dSYM
 
@@ -87,14 +93,14 @@ $(OBJM) : $(OPATH)%.o : %.c $(INCS)
 
 #Unit testing
 $(NAMET): $(LIB) $(OPATH) $(OBJS) $(OBJT)
-	$(CC) -o $@ $(OBJS) $(LIB) $(OBJT)
+	$(CC)  -o $@ $(OBJS) $(LIB) $(OBJT)
 
 $(OBJT) : $(OPATH)%.o : %.c $(INCT)
-	$(COMPILE) $(CFLAGS) $(IFLAGS) $< -o $@
+	$(DEBUG) $(CFLAGS) $(IFLAGS) $< -o $@
 
 #Debug
-$(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(INCS)
-	$(CC) $(DFLAGS) -o $@ $(LIBDB) $(OBJD)
+$(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJM) $(INCS)
+	$(CC) $(DFLAGS) -o $@ $(LIBDB) $(OBJD) $(SRCM)
 	
 $(OBJD) : $(OPATH)db%.o : %.c $(INCS)
 	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@
@@ -120,6 +126,7 @@ fclean : clean
 	$(CLEANUP) $(OPATH)
 	$(CLEANUP) $(NAME)
 	$(CLEANUP) $(NAMEDB)
+	$(CLEANUP) $(NAMET)
 
 re: fclean all
 

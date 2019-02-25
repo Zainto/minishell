@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   read_path.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 17:18:44 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/20 07:47:42 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 04:13:43 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static char	*construct_path(t_prgm *glob, int fd, char *previous)
 	ft_asprintf(&path,"%s%s:", previous ? previous : "", tmp);
 	if (!path)
 	{
-		glob->error = FAILED_MALLOC;	
+		glob->error = FAILED_MALLOC;
 		return (NULL);
 	}
 	ft_strdel(&previous);
@@ -53,43 +53,17 @@ static char	*load_path(t_prgm *glob)
 		return (NULL);
 	}
 	path = construct_path(glob, fd, NULL);
-	if(close(fd) == -1)
+	if (close(fd) == -1)
 		glob->error = FAILED_CLOSE;
 	return (path);
 }
 
-char	*get_path(t_prgm *glob)
+char		*read_path(t_prgm *glob)
 {
 	char	*path;
 
-	path = ft_getenv(glob, "PATH");	
+	path = ft_strdup(ms_getenv(glob, "PATH"));
 	if (!path)
 		path = load_path(glob);
 	return (path);
-}
-
-/*
-   t_list		*generate_path(t_prgm *glob)
-   {
-   t_list		*execs;
-   char		**paths;
-   int			i;
-
-   i = 0;
-   execs = NULL;
-   paths = ft_strsplit(ft_getenv(glob->env, "PATH"), ":");
-   while (paths[i])
-   {
-   ft_dirlist(&execs, paths[i]);
-   i++;
-   }
-   return (execs);
-   }
-   */
-void		print_exec(t_list *node)
-{
-	t_status	*file;
-
-	file = (t_status *)node->data;
-	ft_printf("%s\n", file->name);
 }
