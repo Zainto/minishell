@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 09:44:48 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 12:54:11 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,22 @@ int		echo(t_prgm *glob)
 	return (0);
 }
 
+void	init_builtin(t_prgm *glob)
+{
+	glob->builtin[0].name = "echo";
+	glob->builtin[0].builtin = echo;
+	glob->builtin[1].name = "cd"; 
+	glob->builtin[1].builtin = NULL; 
+	glob->builtin[2].name = "env"; 
+	glob->builtin[2].builtin = ms_env; 
+	glob->builtin[3].name = "setenv"; 
+	glob->builtin[3].builtin = ms_setenv; 
+	glob->builtin[4].name = "unsetenv"; 
+	glob->builtin[4].builtin = ms_unsetenv; 
+	glob->builtin[5].name = NULL; 
+	glob->builtin[5].builtin = ms_unsetenv; 
+}
+
 int		builtins_exec(t_prgm *glob)
 {
 	int		index;
@@ -47,7 +63,6 @@ int		builtins_exec(t_prgm *glob)
 	}
 	return (1);
 }
-
 /*
 int		change_directory(t_prgm *glob)
 {
@@ -63,7 +78,7 @@ int		change_directory(t_prgm *glob)
 		path = ft_strdup(glob->tab.av[1]);
 	if ((current = opendir(path)))
 	{
-		chdir(args->av[1]);
+		chdir(glob->->av[1]);
 		ms_setenv(glob, "OLDPWD", ft_getenv(glob->env, "PWD"));
 		ms_setenv(glob, "PWD", path);
 		closedir(current);

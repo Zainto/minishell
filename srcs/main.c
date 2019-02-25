@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:08:01 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 11:51:51 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,17 @@ int			main(int ac, char **av, char **env)
 	if (ac > 1)
 		return (0);
 	(void)av;
-	initialization(&glob, env);
-	while (process_line(&glob))
+	if (!initialization(&glob, env))
 	{
-		if (ft_strequ(glob.tab.av[0], "exit") && glob.tab.ac == 1)
-			break;
-		if (!builtins_exec(&glob))
-			continue;
-		if (!launcher(&glob))
-			continue;
+		while (process_line(&glob))
+		{
+			if (ft_strequ(glob.tab.av[0], "exit") && glob.tab.ac == 1)
+				break;
+			if (!builtins_exec(&glob) || !launcher(&glob))
+				continue;
+			else
+				error_manager(&glob);
+		}
 	}
 	destruction(&glob);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 09:39:06 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 12:10:29 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,12 @@ int			envinit(t_prgm *glob, char **env)
 int			initialization(t_prgm *glob, char **env)
 {
 	ft_bzero(glob, sizeof(t_prgm));
+	init_error(glob);
+	init_builtin(glob);
 	if (envinit(glob, env) || execinit(glob))
-		return (glob->error);
-	glob->builtin[0].name = "echo";
-	glob->builtin[0].builtin = echo;
-	glob->builtin[1].name = "cd"; 
-	glob->builtin[1].builtin = NULL; 
-	glob->builtin[2].name = "env"; 
-	glob->builtin[2].builtin = NULL; 
-	glob->builtin[3].name = "setenv"; 
-	glob->builtin[3].builtin = ms_setenv; 
-	glob->builtin[4].name = "unsetenv"; 
-	glob->builtin[4].builtin = ms_unsetenv; 
-	glob->builtin[5].name = NULL; 
-	glob->builtin[5].builtin = ms_unsetenv; 
+	{
+		error_manager(glob);
+		return (-1);
+	}
 	return (0);
 }

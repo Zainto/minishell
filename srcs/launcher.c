@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 10:05:20 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:07:40 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 11:44:04 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,11 @@ int		launcher(t_prgm *glob)
 			{
 				waitpid(process, &glob->status, 0);
 				ft_freetab(&env);
+				return (0);
 			}
 			else
 				execve(exec->path, glob->tab.av, env);	
 		}
 	}
-	return (0);
+	return (1);
 }

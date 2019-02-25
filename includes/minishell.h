@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:07:38 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 12:24:55 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define UNCLOSED_COMMA -5
 # define FAILED_READ -6
 # define TOO_FEW_ARGS -7
-# define WRONG_CD_ARGS -7
+# define WRONG_CD_ARGS -8
 # define DEFAULT_PATH "/etc/paths"
 
 
@@ -40,7 +40,6 @@ typedef struct 		s_variable
 	char	*name;
 	char	*data;
 }					t_variable;
-
 
 typedef struct		s_tab
 {
@@ -67,26 +66,33 @@ struct 				s_prgm
 	t_builtin		builtin[6];
 	t_tab			tab;
 	char			*line;
-	int				status;
+	char			*error_str[9];
 	t_error			error;
+	int				status;
 };
 
 
-int					initialization(t_prgm *glob, char **env);
+void				init_error(t_prgm *glob);
+int					envinit(t_prgm *glob, char **env);
 int					execinit(t_prgm *glob);
 char				*read_path(t_prgm *glob);
+void				init_builtin(t_prgm *glob);
+int					initialization(t_prgm *glob, char **env);
+
 int					get_exec(t_prgm *glob, char *path);
-int					envinit(t_prgm *glob, char **env);
 char				*ms_getenv(t_prgm *glob, char *name);
 void				variable_delete(void *data);
 int					ms_setenv(t_prgm *glob);
-void				print_env(t_list *node);
 int					ms_unsetenv(t_prgm *glob);
+
+void				error_manager(t_prgm *glob);
 
 int					process_line(t_prgm *glob);
 int					split_input(t_prgm *glob);
-int					builtins_exec(t_prgm *glob);
+
+int					ms_env(t_prgm *glob);
 int					echo(t_prgm *glob);
+int					builtins_exec(t_prgm *glob);
 int					launcher(t_prgm *glob);
 
 int					generate_exec(t_prgm *glob, char *path);

@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/25 11:10:03 by cempassi         ###   ########.fr        #
+#    Updated: 2019/02/25 13:15:27 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,12 +42,14 @@ INCT += unit.h
 SRCM += main.c
 
 SRCS += env.c
+SRCS += setunsetenv.c
 SRCS += init.c
 SRCS += read_path.c
 SRCS += exec.c
 SRCS += process_line.c
 SRCS += builtin.c
 SRCS += launcher.c
+SRCS += error.c
 
 TEST += unit.c
 TEST += test_envinit.c
@@ -61,6 +63,7 @@ TEST += test_line_processing.c
 DSYM = $(NAME).dSYM
 
 OBJM = $(patsubst %.c, $(OPATH)%.o, $(SRCM))
+OBJMD = $(patsubst %.c, $(OPATH)db%.o, $(SRCM))
 OBJS = $(patsubst %.c, $(OPATH)%.o, $(SRCS))
 OBJD = $(patsubst %.c, $(OPATH)db%.o, $(SRCS))
 OBJT = $(patsubst %.c, $(OPATH)%.o, $(TEST))
@@ -99,10 +102,13 @@ $(OBJT) : $(OPATH)%.o : %.c $(INCT)
 	$(DEBUG) $(CFLAGS) $(IFLAGS) $< -o $@
 
 #Debug
-$(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJM) $(INCS)
-	$(CC) $(DFLAGS) -o $@ $(LIBDB) $(OBJD) $(SRCM)
+$(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJMD) $(INCS)
+	$(CC) $(DFLAGS) -o $@ $(LIBDB) $(OBJD) $(OBJMD)
 	
 $(OBJD) : $(OPATH)db%.o : %.c $(INCS)
+	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@
+
+$(OBJMD) : $(OPATH)db%.o : %.c $(INCS)
 	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@
 
 #Libraries

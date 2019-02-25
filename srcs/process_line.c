@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 07:18:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/25 11:51:30 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ int			process_line(t_prgm *glob)
 {
 	int		ret;
 
+	ft_freetab(&glob->tab.av);
+	ft_strdel(&glob->line);
 	ft_putstr("$> ");
 	ret = ft_getdelim(0, &glob->line, '\n');
 	if (ret != 1)
