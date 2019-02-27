@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/25 13:15:27 by cempassi         ###   ########.fr        #
+#    Updated: 2019/02/27 18:30:58 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ SRCS += process_line.c
 SRCS += builtin.c
 SRCS += launcher.c
 SRCS += error.c
+SRCS += split_input.c
 
 TEST += unit.c
 TEST += test_envinit.c

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 12:54:11 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/27 18:37:45 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,17 @@ int		echo(t_prgm *glob)
 	return (0);
 }
 
+int		ms_exit(t_prgm *glob)
+{
+	int		exitcode;
+
+	if (glob->tab.ac > 2)
+		return (glob->error = WRONG_EXIT_ARGS);
+	exitcode = ft_atoi(glob->tab.av[1]);
+	exit(exitcode);
+	return (0);
+}
+
 void	init_builtin(t_prgm *glob)
 {
 	glob->builtin[0].name = "echo";
@@ -46,8 +57,10 @@ void	init_builtin(t_prgm *glob)
 	glob->builtin[3].builtin = ms_setenv; 
 	glob->builtin[4].name = "unsetenv"; 
 	glob->builtin[4].builtin = ms_unsetenv; 
-	glob->builtin[5].name = NULL; 
-	glob->builtin[5].builtin = ms_unsetenv; 
+	glob->builtin[5].name = "exit"; 
+	glob->builtin[5].builtin = ms_exit; 
+	glob->builtin[6].name = NULL; 
+	glob->builtin[6].builtin = NULL; 
 }
 
 int		builtins_exec(t_prgm *glob)

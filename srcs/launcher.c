@@ -6,14 +6,14 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 10:05:20 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:44:04 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/27 18:22:20 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "unistd.h"
 #include <stdlib.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/wait.h>
 
 int		find_exec(void *data, void *to_find)
@@ -38,7 +38,7 @@ char	**lsttotab(t_list *list)
 	while (index < lstlen)
 	{
 		tmp = list->data;
-		ft_asprintf(&tab[index++], "%s=%s",tmp->name, tmp->data); 
+		ft_asprintf(&tab[index++], "%s=%s",tmp->name, tmp->data);
 	}
 	tab[index] = NULL;
 	return (tab);
@@ -57,14 +57,14 @@ int		launcher(t_prgm *glob)
 		if (!access(exec->path, F_OK))
 		{
 			env = lsttotab(glob->env);
-			if ((process = fork()))	
+			if ((process = fork()))
 			{
 				waitpid(process, &glob->status, 0);
 				ft_freetab(&env);
 				return (0);
 			}
 			else
-				execve(exec->path, glob->tab.av, env);	
+				execve(exec->path, glob->tab.av, env);
 		}
 	}
 	return (1);

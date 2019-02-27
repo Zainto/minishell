@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 12:24:55 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/27 18:32:23 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define FAILED_READ -6
 # define TOO_FEW_ARGS -7
 # define WRONG_CD_ARGS -8
+# define WRONG_EXIT_ARGS -9
 # define DEFAULT_PATH "/etc/paths"
 
 
@@ -57,16 +58,17 @@ typedef enum		e_error
 	E_FAILED_READ = FAILED_READ,
 	E_TOO_FEW_ARGS = TOO_FEW_ARGS,
 	E_WRONG_CD_ARGS = WRONG_CD_ARGS,
+	E_WRONG_EXIT_ARGS = WRONG_EXIT_ARGS,
 }					t_error;
 
 struct 				s_prgm
 {
 	t_list			*env;
 	t_list			*exec;
-	t_builtin		builtin[6];
+	t_builtin		builtin[7];
 	t_tab			tab;
 	char			*line;
-	char			*error_str[9];
+	char			*error_str[10];
 	t_error			error;
 	int				status;
 };
@@ -77,7 +79,9 @@ int					envinit(t_prgm *glob, char **env);
 int					execinit(t_prgm *glob);
 char				*read_path(t_prgm *glob);
 void				init_builtin(t_prgm *glob);
+
 int					initialization(t_prgm *glob, char **env);
+void				destruction(t_prgm *glob);
 
 int					get_exec(t_prgm *glob, char *path);
 char				*ms_getenv(t_prgm *glob, char *name);
@@ -92,6 +96,7 @@ int					split_input(t_prgm *glob);
 
 int					ms_env(t_prgm *glob);
 int					echo(t_prgm *glob);
+int					ms_exit(t_prgm *glob);
 int					builtins_exec(t_prgm *glob);
 int					launcher(t_prgm *glob);
 

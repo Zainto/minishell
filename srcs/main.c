@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:51:51 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/27 18:34:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int			main(int ac, char **av, char **env)
 	{
 		while (process_line(&glob))
 		{
-			if (ft_strequ(glob.tab.av[0], "exit") && glob.tab.ac == 1)
-				break;
 			if (!builtins_exec(&glob) || !launcher(&glob))
 				continue;
 			else
