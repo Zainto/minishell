@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 04:59:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:56:17 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ int			process_line(t_prgm *glob)
 	ft_putstr("$> ");
 	if (ft_getdelim(0, &glob->line, '\n') != 1)
 		return (glob->error = FAILED_READ);
+	if (ft_strequ(glob->line, "(null)"))
+		return (1);
 	if (replace_variable(glob))
 		return (glob->error);
 	if (replace_home(glob))

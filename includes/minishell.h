@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 05:52:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 07:10:23 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include "ft_printf.h"
+# define SPACE " \t\v\r"
 # define DIR_MAX 1024
 # define NULL_ARG -1
 # define FAILED_MALLOC -2
@@ -26,6 +27,8 @@
 # define TOO_FEW_ARGS -8
 # define WRONG_CD_PATH -9
 # define WRONG_EXIT_ARGS -10
+# define WRONG_CD_TYPE -11
+# define WRONG_ARG_NUM -12
 # define DEFAULT_PATH "/etc/paths"
 
 typedef struct	s_prgm	t_prgm;
@@ -68,6 +71,8 @@ typedef enum		e_error
 	E_TOO_FEW_ARGS = TOO_FEW_ARGS,
 	E_WRONG_CD_PATH = WRONG_CD_PATH,
 	E_WRONG_EXIT_ARGS = WRONG_EXIT_ARGS,
+	E_WRONG_CD_TYPE = WRONG_CD_TYPE,
+	E_WRONG_ARG_NUM = WRONG_ARG_NUM,
 }					t_error;
 
 struct 				s_prgm
@@ -79,7 +84,7 @@ struct 				s_prgm
 	t_error			error;
 	int				status;
 	t_builtin		builtin[6];
-	const char		*error_str[11];
+	const char		*error_str[13];
 };
 
 int					initialization(t_prgm *glob, char **env);

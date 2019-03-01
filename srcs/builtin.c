@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 06:19:44 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:44:50 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int		ms_exit(t_prgm *glob)
+int				ms_exit(t_prgm *glob)
 {
 	int		exitcode;
 
@@ -32,7 +32,7 @@ int		ms_exit(t_prgm *glob)
 	return (0);
 }
 
-int		echo(t_prgm *glob)
+int				echo(t_prgm *glob)
 {
 	int		n;
 	int		i;
@@ -51,29 +51,38 @@ int		echo(t_prgm *glob)
 	return (0);
 }
 
-int		change_directory(t_prgm *glob)
+static int		move(t_prgm *glob, char *path)
 {
-	char	*path;
-
-	if (glob->tab.ac != 2)
-		return (glob->error = WRONG_CD_ARGS);
-	path = NULL;
-	if (glob->tab.av[1][0] != '/')
-		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
-	else
-		path = ft_strdup(glob->tab.av[1]);
 	if (!access(path, F_OK + R_OK + X_OK))
 	{
-		chdir(glob->tab.av[1]);
+		if (chdir(path) < 0)
+			return (glob->error = WRONG_CD_TYPE);
 		replace_env(glob->env, "OLDPWD", ms_getenv(glob, "PWD"));
 		replace_env(glob->env, "PWD", path);
 		return (0);
 	}
-	else
-		return (glob->error = WRONG_CD_PATH);
+	return (glob->error = WRONG_CD_PATH);
 }
 
-void	init_builtin(t_prgm *glob)
+int				change_directory(t_prgm *glob)
+{
+	char	*path;
+
+	if (glob->tab.ac > 2)
+		return (glob->error = WRONG_CD_ARGS);
+	path = NULL;
+	if (glob->tab.ac == 1)
+		ft_asprintf(&path, "%s", ms_getenv(glob, "HOME"));
+	else if (glob->tab.av[1][0] != '/')
+		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
+	else
+		path = ft_strdup(glob->tab.av[1]);
+	move(glob, path);
+	ft_strdel(&path);
+	return (glob->error);
+}
+
+void			init_builtin(t_prgm *glob)
 {
 	glob->builtin[0].name = "echo";
 	glob->builtin[0].builtin = echo;
@@ -86,18 +95,4 @@ void	init_builtin(t_prgm *glob)
 	glob->builtin[4].name = "exit";
 	glob->builtin[4].builtin = ms_exit;
 	glob->builtin[5].name = NULL;
-}
-
-int		builtins_exec(t_prgm *glob)
-{
-	int		index;
-
-	index = 0;
-	while (glob->builtin[index].name)
-	{
-		if (ft_strequ(glob->builtin[index].name, glob->tab.av[0]))
-			return (glob->builtin[index].builtin(glob));
-		index++;
-	}
-	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/01 05:50:00 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/01 06:29:42 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,16 +41,16 @@ INCT += unit.h
 
 SRCM += main.c
 
-SRCS += env.c
-SRCS += setunsetenv.c
-SRCS += init.c
-SRCS += read_path.c
-SRCS += process_line.c
 SRCS += builtin.c
-SRCS += launcher.c
+SRCS += env.c
 SRCS += error.c
-SRCS += split_input.c
 SRCS += finders.c
+SRCS += init.c
+SRCS += launcher.c
+SRCS += process_line.c
+SRCS += read_path.c
+SRCS += setunsetenv.c
+SRCS += split_input.c
 
 TEST += unit.c
 TEST += test_envinit.c
