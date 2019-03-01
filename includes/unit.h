@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 23:42:10 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 01:14:47 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 05:50:19 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int			test_ms_getenv(void);
 int			test_read_path(void);
 int			test_execinit(void);
 int			test_generate_exec(void);
-int			test_get_exec(void);
 int			test_line_processing(void);
 int			test_replace_variable(void);
 int			test_replace_home(void);

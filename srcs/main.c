@@ -6,38 +6,58 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 05:31:23 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:17:56 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-void		destruction(t_prgm *glob)
+static int		duplicate_av(t_prgm *glob, int ac, char **av)
 {
-	ft_lstdel(&glob->env, variable_delete);
-	ft_dirdel(&glob->exec);
-	ft_freetab(&glob->tab.av);
-	ft_strdel(&glob->line);
+	int			index;
+	int			id;
+
+	id = 0;
+	index = 1;
+	if (!(glob->tab.av = malloc(sizeof(char *) * (ac))))
+		return (glob->error = FAILED_MALLOC);
+	while (index < ac)
+		glob->tab.av[id++] = ft_strdup(av[index++]);
+	glob->tab.av[id] = NULL;
+	glob->tab.ac = ac - 1;
+	return (0);
 }
 
-int			main(int ac, char **av, char **env)
+static void		non_interactive(t_prgm *glob, int ac, char **av)
+{
+	duplicate_av(glob, ac, av);
+	if (env_handeler(glob))
+		error_manager(glob);
+	ms_exit(glob);
+}
+
+static void		interactive(t_prgm *glob)
+{
+	while (process_line(glob))
+	{
+		if (glob->error < 0)
+			error_manager(glob);
+		else if (env_handeler(glob))
+			error_manager(glob);
+	}
+}
+
+int				main(int ac, char **av, char **env)
 {
 	t_prgm		glob;
 
-	if (ac > 1)
-		return (0);
-	(void)av;
 	if (!initialization(&glob, env))
 	{
-		while (process_line(&glob))
-		{
-			if (glob.error < 0)
-				error_manager(&glob);	
-			else if (env_handeler(&glob))
-				error_manager(&glob);
-		}
+		if (ac > 1)
+			non_interactive(&glob, ac, av);
+		else
+			interactive(&glob);
 	}
-	destruction(&glob);
 	return (0);
 }

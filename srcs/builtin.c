@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 05:47:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:19:44 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@ int		ms_exit(t_prgm *glob)
 
 	if (glob->tab.ac > 2)
 		return (glob->error = WRONG_EXIT_ARGS);
-	if (glob->error <= -7)
+	if (glob->error <= -7 || glob->error == 0)
 		exitcode = ft_atoi(glob->tab.av[1]);
 	else
 		exitcode = -1;
-	destruction(glob);
+	ft_lstdel(&glob->env, variable_delete);
+	ft_dirdel(&glob->exec);
+	ft_freetab(&glob->tab.av);
+	ft_strdel(&glob->line);
 	exit(exitcode);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 04:23:54 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 05:28:28 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:24:06 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int		find_exec(void *data, void *to_find)
 	t_status *exec;
 
 	exec = data;
+	if (ft_strequ(exec->path, (char *)to_find))
+		return (1);
 	return (ft_strequ(exec->name, (char *)to_find));
 }
 

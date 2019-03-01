@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 05:47:37 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 05:52:03 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ struct 				s_prgm
 };
 
 int					initialization(t_prgm *glob, char **env);
-void				destruction(t_prgm *glob);
 int					env_handeler(t_prgm *glob);
 void				error_manager(t_prgm *glob);
 
