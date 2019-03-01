@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/28 21:23:15 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 05:31:23 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,9 @@ int			main(int ac, char **av, char **env)
 	{
 		while (process_line(&glob))
 		{
-			if (!builtins_exec(&glob))
-				continue;
-			else if (glob.error)
-				error_manager(&glob);
-			else if (!launcher(&glob))
-				continue;
-			else
+			if (glob.error < 0)
+				error_manager(&glob);	
+			else if (env_handeler(&glob))
 				error_manager(&glob);
 		}
 	}

@@ -6,19 +6,11 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/28 22:05:42 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 04:36:25 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int			varcmp(void *data, void *to_find)
-{
-	t_variable	*variable;
-
-	variable = data;
-	return (ft_strequ(variable->name, (char *)to_find));
-}
 
 char		*ms_getenv(t_prgm *glob, char *name)
 {

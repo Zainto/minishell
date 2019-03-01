@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 02:00:53 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 04:59:03 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,5 @@ int			process_line(t_prgm *glob)
 		return (glob->error);
 	if (replace_home(glob))
 		return (glob->error);
-	split_input(glob);
-	return (1);
+	return (split_input(glob));
 }

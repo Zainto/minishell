@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/01 00:52:36 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/01 04:44:31 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libftdb.a
 
 CC = Clang
-COMPILE = $(CC) -c
+COMPILE = $(CC) -c -g
 DEBUG = $(CC) -g -c
 
 MKDIR = mkdir -p
@@ -45,12 +45,12 @@ SRCS += env.c
 SRCS += setunsetenv.c
 SRCS += init.c
 SRCS += read_path.c
-SRCS += exec.c
 SRCS += process_line.c
 SRCS += builtin.c
 SRCS += launcher.c
 SRCS += error.c
 SRCS += split_input.c
+SRCS += finders.c
 
 TEST += unit.c
 TEST += test_envinit.c
@@ -142,4 +142,3 @@ re: fclean all
 FORCE :
 
 .PHONY: all clean fclean debug test FORCE
-.SILENT:
