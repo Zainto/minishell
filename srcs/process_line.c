@@ -6,94 +6,111 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:51:30 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:56:17 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	checker(const char *str)
+static int	replacer_var(t_prgm *glob, t_list *node, int index)
 {
-	int		index;
+	t_variable	*holder;
+	char		*tmp;
+	int			len;
 
-	if (*str =='\"')
-		index = ft_strcspn(str + 1, "\"");
-	else
-		index = ft_strcspn(str + 1, "\'");
-	return (str[index + 1] ? index : -1);
+	len = ft_strcspn(glob->line, "$");
+	if (!node)
+	{
+		if (ft_asprintf(&tmp, "%.*s", len, glob->line) < 0)
+			return (glob->error = FAILED_MALLOC);
+	}
+	else if (!(tmp = NULL))
+	{
+		holder = node->data;
+		ft_asprintf(&tmp, "%.*s%s%s"
+				, len, glob->line, holder->data, glob->line + len + index + 1);
+	}
+	ft_strdel(&glob->line);
+	glob->line = tmp;
+	return (0);
 }
 
-static int	parser(t_prgm *glob, const char *str)
+int			replace_variable(t_prgm *glob)
 {
-	int		index;
+	char	*str;
+	char	*to_find;
+	t_list	*node;
 
-	if (glob->error)
-		return (glob->error);
-	while (ft_strchr(" =", *str) && *str)
-		str++;
-	if (*str == '\0')
-		return (0);
-	if (ft_strchr("\"\'", *str))
+	if(!glob->line)
+		return (glob->error = NULL_ARG);
+	str = glob->line;
+	while (*str)
 	{
-		if ((index = checker(str)) == -1)
-			return (glob->error = UNCLOSED_COMMA);
-		return (1 + parser(glob, str + index  + 2));
+		if(*str++ == '$')
+		{
+			to_find = ft_strsub(str, 0, ft_strcspn(str, " "));
+			node = ft_lstfind(glob->env, to_find, varcmp);
+			if (replacer_var(glob, node, ft_strlen(to_find)))
+				return (glob->error);
+			ft_strdel(&to_find);
+			str = glob->line;
+		}
+		str += ft_strcspn(str, "$");
 	}
-	else
-		while (!ft_strchr(" =", *str) && *str)
-			str++;
-	return (1 + parser(glob, str));
+	return (0);
 }
 
-static int	writer(t_prgm *glob, char const *str, char ***tab, int word)
+static int	replacer_home(t_prgm *glob, int id)
 {
-	int		i;
+	char	*home;
+	char	*res;
+	char	*str;
 
-	while (ft_strchr(" =", *str) && *str)
-		str++;
-	if (*str == '\0')
-		return (1);
-	if (ft_strchr("\"\'", *str))
-	{
-		i = checker(str);
-		tab[0][word] = ft_strsub(str, 1, i);
-		i += 2;
-	}
-	else
-	{
-		i = ft_strcspn(str, " =");
-		tab[0][word] = ft_strsub(str, *str == '=' ? 1 : 0, i);
-	}
-	if (writer(glob, str + i, tab, word + 1) == 1)
-		return (1);
-	return (-1);
-}
-
-int			split_input(t_prgm *glob)
-{
-	if (glob->line == NULL)
-		return (NULL_ARG);
-	glob->tab.ac = parser(glob, glob->line);
-	if (glob->error)
-		return (glob->error);
-	if (!(glob->tab.av = ft_memalloc(sizeof(char *) * (glob->tab.ac + 1))))
+	home = ms_getenv(glob, "HOME");
+	res = NULL;
+	str = glob->line;
+	if(ft_asprintf(&res, "%.*s%s%s", id, str, home, str + id + 1) < 0)
 		return (glob->error = FAILED_MALLOC);
-	if (writer(glob, glob->line, &glob->tab.av, 0) == -1)
-		return (glob->error == FAILED_MALLOC);
-	glob->tab.av[glob->tab.ac] = NULL;
+	ft_strdel(&glob->line);
+	glob->line = res;
+	return (0);
+}
+
+int			replace_home(t_prgm *glob)
+{
+	char	*str;
+	int		id;
+
+	if (!glob->line)
+		return (glob->error = NULL_ARG);;
+	str = glob->line;
+	id = 0;
+	while(str[id])
+	{
+		if(str[id] == '~' && (id == 0 || str[id - 1] == ' '))
+		{
+			if(replacer_home(glob, id))
+				return (glob->error);
+			str = glob->line;
+			id++;
+		}
+		id += ft_strcspn(&str[id], "~");
+	}
 	return (0);
 }
 
 int			process_line(t_prgm *glob)
 {
-	int		ret;
-
 	ft_freetab(&glob->tab.av);
 	ft_strdel(&glob->line);
 	ft_putstr("$> ");
-	ret = ft_getdelim(0, &glob->line, '\n');
-	if (ret != 1)
+	if (ft_getdelim(0, &glob->line, '\n') != 1)
 		return (glob->error = FAILED_READ);
-	split_input(glob);
-	return (1);
+	if (ft_strequ(glob->line, "(null)"))
+		return (1);
+	if (replace_variable(glob))
+		return (glob->error);
+	if (replace_home(glob))
+		return (glob->error);
+	return (split_input(glob));
 }

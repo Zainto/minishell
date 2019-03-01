@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/25 13:15:27 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/01 06:29:42 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libftdb.a
 
 CC = Clang
-COMPILE = $(CC) -c
+COMPILE = $(CC) -c -g
 DEBUG = $(CC) -g -c
 
 MKDIR = mkdir -p
@@ -41,15 +41,16 @@ INCT += unit.h
 
 SRCM += main.c
 
-SRCS += env.c
-SRCS += setunsetenv.c
-SRCS += init.c
-SRCS += read_path.c
-SRCS += exec.c
-SRCS += process_line.c
 SRCS += builtin.c
-SRCS += launcher.c
+SRCS += env.c
 SRCS += error.c
+SRCS += finders.c
+SRCS += init.c
+SRCS += launcher.c
+SRCS += process_line.c
+SRCS += read_path.c
+SRCS += setunsetenv.c
+SRCS += split_input.c
 
 TEST += unit.c
 TEST += test_envinit.c
@@ -57,8 +58,9 @@ TEST += test_execinit.c
 TEST += test_ft_getenv.c
 TEST += test_get_path.c
 TEST += test_generate_exec.c
-TEST += test_get_exec.c
 TEST += test_line_processing.c
+TEST += test_replace_variable.c
+TEST += test_replace_home.c
 
 DSYM = $(NAME).dSYM
 
@@ -139,4 +141,3 @@ re: fclean all
 FORCE :
 
 .PHONY: all clean fclean debug test FORCE
-.SILENT:

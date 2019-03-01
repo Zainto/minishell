@@ -6,16 +6,33 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 12:54:11 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 06:44:50 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <dirent.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-int		echo(t_prgm *glob)
+int				ms_exit(t_prgm *glob)
+{
+	int		exitcode;
+
+	if (glob->tab.ac > 2)
+		return (glob->error = WRONG_EXIT_ARGS);
+	if (glob->error <= -7 || glob->error == 0)
+		exitcode = ft_atoi(glob->tab.av[1]);
+	else
+		exitcode = -1;
+	ft_lstdel(&glob->env, variable_delete);
+	ft_dirdel(&glob->exec);
+	ft_freetab(&glob->tab.av);
+	ft_strdel(&glob->line);
+	exit(exitcode);
+	return (0);
+}
+
+int				echo(t_prgm *glob)
 {
 	int		n;
 	int		i;
@@ -34,57 +51,48 @@ int		echo(t_prgm *glob)
 	return (0);
 }
 
-void	init_builtin(t_prgm *glob)
+static int		move(t_prgm *glob, char *path)
 {
-	glob->builtin[0].name = "echo";
-	glob->builtin[0].builtin = echo;
-	glob->builtin[1].name = "cd"; 
-	glob->builtin[1].builtin = NULL; 
-	glob->builtin[2].name = "env"; 
-	glob->builtin[2].builtin = ms_env; 
-	glob->builtin[3].name = "setenv"; 
-	glob->builtin[3].builtin = ms_setenv; 
-	glob->builtin[4].name = "unsetenv"; 
-	glob->builtin[4].builtin = ms_unsetenv; 
-	glob->builtin[5].name = NULL; 
-	glob->builtin[5].builtin = ms_unsetenv; 
-}
-
-int		builtins_exec(t_prgm *glob)
-{
-	int		index;
-
-	index = 0;
-	while (glob->builtin[index].name)
+	if (!access(path, F_OK + R_OK + X_OK))
 	{
-		if(ft_strequ(glob->builtin[index].name, glob->tab.av[0]))
-			return (glob->builtin[index].builtin(glob));
-		index++;
+		if (chdir(path) < 0)
+			return (glob->error = WRONG_CD_TYPE);
+		replace_env(glob->env, "OLDPWD", ms_getenv(glob, "PWD"));
+		replace_env(glob->env, "PWD", path);
+		return (0);
 	}
-	return (1);
+	return (glob->error = WRONG_CD_PATH);
 }
-/*
-int		change_directory(t_prgm *glob)
+
+int				change_directory(t_prgm *glob)
 {
-	DIR		*current;
 	char	*path;
 
-	if (glob->tab.ac != 2)
+	if (glob->tab.ac > 2)
 		return (glob->error = WRONG_CD_ARGS);
 	path = NULL;
-	if (glob->tab.av[1][0] != '/')
+	if (glob->tab.ac == 1)
+		ft_asprintf(&path, "%s", ms_getenv(glob, "HOME"));
+	else if (glob->tab.av[1][0] != '/')
 		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
 	else
 		path = ft_strdup(glob->tab.av[1]);
-	if ((current = opendir(path)))
-	{
-		chdir(glob->->av[1]);
-		ms_setenv(glob, "OLDPWD", ft_getenv(glob->env, "PWD"));
-		ms_setenv(glob, "PWD", path);
-		closedir(current);
-		return (0);
-	}
-	else
-		return (-1);
+	move(glob, path);
+	ft_strdel(&path);
+	return (glob->error);
 }
-*/
+
+void			init_builtin(t_prgm *glob)
+{
+	glob->builtin[0].name = "echo";
+	glob->builtin[0].builtin = echo;
+	glob->builtin[1].name = "cd";
+	glob->builtin[1].builtin = change_directory;
+	glob->builtin[2].name = "setenv";
+	glob->builtin[2].builtin = ms_setenv;
+	glob->builtin[3].name = "unsetenv";
+	glob->builtin[3].builtin = ms_unsetenv;
+	glob->builtin[4].name = "exit";
+	glob->builtin[4].builtin = ms_exit;
+	glob->builtin[5].name = NULL;
+}
