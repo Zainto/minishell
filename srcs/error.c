@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 11:25:23 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/27 18:29:25 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/28 19:14:59 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void	init_error(t_prgm *glob)
 	glob->error_str[5] = "Unclosed comma";	
 	glob->error_str[6] = "System Failure on Read";	
 	glob->error_str[7] = "Too few arguments";	
-	glob->error_str[8] = "Wrong arguments number";	
-	glob->error_str[9] = "Wrong arguments number";	
+	glob->error_str[8] = "Cd takes only one argument";	
+	glob->error_str[9] = "Invalid path";	
+	glob->error_str[10] = "Wrong arguments number";	
 }
 
 void	error_manager(t_prgm *glob)

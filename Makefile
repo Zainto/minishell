@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/02/27 18:30:58 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/01 00:52:36 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,8 @@ TEST += test_get_path.c
 TEST += test_generate_exec.c
 TEST += test_get_exec.c
 TEST += test_line_processing.c
+TEST += test_replace_variable.c
+TEST += test_replace_home.c
 
 DSYM = $(NAME).dSYM
 

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 23:41:04 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 04:37:46 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 01:14:54 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	glob_test_init(t_prgm *glob)
 	t_variable	variable4= {.name = "totm", .data = "tatb"};
 	t_variable	variable5= {.name = "totn", .data = "tatn"};
 	t_variable	variable6= {.name = "PATH", .data = ENV_PATH};
+	t_variable	variable7= {.name = "HOME", .data = HOME};
 
 	ft_bzero(glob, sizeof(t_prgm));
 	ft_lstadd(&glob->env, ft_lstnew(&variable1, sizeof(t_variable)));
@@ -53,6 +54,7 @@ void	glob_test_init(t_prgm *glob)
 	ft_lstadd(&glob->env, ft_lstnew(&variable4, sizeof(t_variable)));
 	ft_lstadd(&glob->env, ft_lstnew(&variable5, sizeof(t_variable)));
 	ft_lstadd(&glob->env, ft_lstnew(&variable6, sizeof(t_variable)));
+	ft_lstadd(&glob->env, ft_lstnew(&variable7, sizeof(t_variable)));
 }
 
 void	glob_test_destructor(t_prgm *glob)
@@ -75,4 +77,8 @@ int		main(void)
 	test_execinit();
 	print_test_separator();	
 	test_line_processing();
+	print_test_separator();	
+	test_replace_variable();
+	print_test_separator();	
+	test_replace_home();
 }

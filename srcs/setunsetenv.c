@@ -6,13 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/25 11:58:10 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/02/28 22:05:42 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	varcmp(void *data, void *to_find)
+int			varcmp(void *data, void *to_find)
 {
 	t_variable	*variable;
 
@@ -34,21 +34,30 @@ char		*ms_getenv(t_prgm *glob, char *name)
 	return (NULL);
 }
 
+int			replace_env(t_list *env, char *to_find, char *data)
+{
+	t_list		*node;
+	t_variable	*tmp;
+
+	if ((node = ft_lstfind(env, to_find, varcmp)))
+	{
+		tmp = node->data;
+		ft_strdel(&tmp->data);
+		tmp->data = ft_strdup(data);
+		return (1);
+	}
+	return (0);
+}
+
 int			ms_setenv(t_prgm *glob)
 {
 	t_list	*node;
-	t_variable	*tmp;
 	t_variable	template;
 
 	if (glob->tab.ac != 3)
 		return (-1);
-	if ((node = ft_lstfind(glob->env, glob->tab.av[1], varcmp)))
-	{
-		tmp = node->data;
-		ft_strdel(&tmp->data);
-		tmp->data = ft_strdup(glob->tab.av[2]);
+	if (replace_env(glob->env, glob->tab.av[1], glob->tab.av[2]))
 		return (0);
-	}
 	template.name = ft_strdup(glob->tab.av[1]);
 	template.data = ft_strdup(glob->tab.av[2]);
 	node = ft_lstnew(&template, sizeof(t_variable));
