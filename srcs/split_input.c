@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 14:17:06 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 03:45:11 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 20:11:26 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static int	writer(t_prgm *glob, char const *str, char ***tab, int word)
 int			split_input(t_prgm *glob)
 {
 	if (glob->line == NULL)
-		return (NULL_ARG);
+		return (glob->error = NULL_ARG_PASSED);
 	glob->tab.ac = parser(glob, glob->line);
 	if (glob->error)
 		return (glob->error);

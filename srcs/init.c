@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 02:35:54 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 21:41:03 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			generate_exec(t_prgm *glob, char *path)
 	int			index;
 
 	if (!path)
-		return (NULL_ARG);
+		return (glob->error = NULL_ARG_PASSED);
 	index = 0;
 	if (!(tab = ft_strsplit(path, ":")))
 		return (glob->error = FAILED_MALLOC);
@@ -83,7 +83,7 @@ int			envinit(t_prgm *glob, char **env)
 	int				i;
 
 	i = 0;
-	if (!*env)
+	if (!env || !*env)
 		basic_env(glob);
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:18:51 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 19:51:06 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 20:13:36 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		NullStrArgument(void)
 	t_prgm		glob;
 
 	glob.line = NULL;
-	if (split_input(&glob) == NULL_ARG)
+	if (split_input(&glob) == NULL_ARG_PASSED)
 		return (ISTRUE);
 	return (ISFALSE);
 }

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 01:50:11 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 19:53:30 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "ft_printf.h"
 # define SPACE " \t\v\r"
 # define DIR_MAX 1024
-# define NULL_ARG -1
+# define WRONG_COMMAND -1
 # define FAILED_MALLOC -2
 # define FAILED_OPEN -3
 # define FAILED_CLOSE -4
@@ -30,10 +30,12 @@
 # define WRONG_CD_TYPE -11
 # define WRONG_ARG_NUM -12
 # define WRONG_ARG_ENV_U -13
-# define EMPTY_LINE 1
+# define NULL_ARG_PASSED -14
+# define EMPTY_LINE -15
 # define DEFAULT_PATH "/etc/paths"
 # define ENVLDEL 1
 # define EXECDEL 2
+
 typedef struct	s_prgm	t_prgm;
 typedef int		(*t_built)(t_prgm *);
 
@@ -67,7 +69,7 @@ typedef struct		s_local
 
 typedef enum		e_error
 {
-	E_NULL_ARG = NULL_ARG,
+	E_WRONG_COMMAND = WRONG_COMMAND,
 	E_FAILED_MALLOC = FAILED_MALLOC,
 	E_FAILED_OPEN = FAILED_OPEN,
 	E_FAILED_CLOSE = FAILED_CLOSE,
@@ -80,6 +82,8 @@ typedef enum		e_error
 	E_WRONG_CD_TYPE = WRONG_CD_TYPE,
 	E_WRONG_ARG_NUM = WRONG_ARG_NUM,
 	E_WRONG_ARG_ENV_U = WRONG_ARG_ENV_U,
+	E_NULL_ARG = NULL_ARG_PASSED,
+	E_EMPTY_LINE = EMPTY_LINE,
 }					t_error;
 
 struct 				s_prgm
@@ -91,7 +95,7 @@ struct 				s_prgm
 	t_error			error;
 	int				status;
 	t_builtin		builtin[6];
-	const char		*error_str[14];
+	const char		*e_str[15];
 };
 
 int					initialization(t_prgm *glob, char **env);

@@ -17,7 +17,7 @@ static int		NullArg(void)
 	t_prgm	glob;
 
 	glob.line = NULL;
-	if (replace_home(&glob) == NULL_ARG)
+	if (replace_home(&glob) == NULL_ARG_PASSED)
 		return (ISTRUE);
 	return (ISFALSE);
 }

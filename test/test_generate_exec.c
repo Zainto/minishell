@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/21 20:40:50 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/21 21:15:16 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 21:16:17 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		NullPathArgument(void)
 {
-	if (generate_exec(NULL, NULL) == NULL_ARG)
+	if (generate_exec(NULL, NULL) == NULL_ARG_PASSED)
 		return (ISTRUE);
 	else
 		return (ISFALSE);

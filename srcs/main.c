@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 02:56:36 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 23:21:14 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ static void		interactive(t_prgm *glob)
 {
 	while (process_line(glob))
 	{
-		if (glob->error == EMPTY_LINE)
-			glob->error = 0;
-		else if (glob->error < 0)
+		if (glob->error < 0)
 			error_manager(glob);
 		else if (env_handeler(glob) < 0)
 			error_manager(glob);
+			
 	}
 }
 

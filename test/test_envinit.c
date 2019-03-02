@@ -6,21 +6,11 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 23:51:07 by cempassi          #+#    #+#             */
-/*   Updated: 2019/02/21 21:01:35 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 21:26:51 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "unit.h"
-
-static int			NullArgWithEmptyEnv(void)
-{
-	t_prgm	glob;
-
-	if (envinit(&glob, NULL) == NULL_ARG)
-		return (ISTRUE);
-	else
-		return (ISFALSE);
-}
 
 static int			EnvIsNullTerminated(void)
 {
@@ -181,6 +171,5 @@ int			test_envinit(void)
 	load_test(&tests, "One Valid Data", GetOneValidData);
 	load_test(&tests, "One Valid Name", GetOneValidName);
 	load_test(&tests, "Env is null terminated", EnvIsNullTerminated);
-	load_test(&tests, "NULL env as argument", NullArgWithEmptyEnv);
 	return (run_test(&tests));
 }

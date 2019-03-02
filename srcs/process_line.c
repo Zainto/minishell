@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 03:45:39 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 20:08:38 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static int	replacer_var(t_prgm *glob, t_list *node, int index)
 	t_variable	*holder;
 	char		*tmp;
 	int			len;
+	int			diff;
 
 	len = ft_strcspn(glob->line, "$");
 	if (!node)
@@ -29,8 +30,11 @@ static int	replacer_var(t_prgm *glob, t_list *node, int index)
 	else if (!(tmp = NULL))
 	{
 		holder = node->data;
+		diff = len + index + 1;
 		ft_asprintf(&tmp, "%.*s%s%s"
-				, len, glob->line, holder->data, glob->line + len + index + 1);
+					, len, glob->line, holder->data, &glob->line[diff]);
+		if(!tmp)
+			return (glob->error = FAILED_MALLOC);
 	}
 	ft_strdel(&glob->line);
 	glob->line = tmp;
@@ -44,7 +48,7 @@ int			replace_variable(t_prgm *glob)
 	t_list	*node;
 
 	if(!glob->line)
-		return (glob->error = NULL_ARG);
+		return (glob->error = NULL_ARG_PASSED);
 	str = glob->line;
 	while (*str)
 	{
@@ -84,7 +88,7 @@ int			replace_home(t_prgm *glob)
 	int		id;
 
 	if (!glob->line)
-		return (glob->error = NULL_ARG);;
+		return (glob->error = NULL_ARG_PASSED);
 	str = glob->line;
 	id = 0;
 	while(str[id])
@@ -107,14 +111,14 @@ int			process_line(t_prgm *glob)
 	ft_bzero(&glob->tab, sizeof(t_tab));
 	ft_putstr("$> ");
 	if (ft_getdelim(0, &glob->line, '\n') != 1)
-		return (glob->error = FAILED_READ);
-	if (replace_variable(glob))
-		return (glob->error);
-	if (replace_home(glob))
-		return (glob->error);
-	if (*glob->line && split_input(glob) < 0)
-		return (glob->error);
-	if (!glob->tab.ac)
+		glob->error = FAILED_READ;
+	if (!glob->error)
+	{
+		replace_variable(glob);
+		replace_home(glob);
+		split_input(glob);
+	}
+	if (!glob->tab.ac && !glob->error)
 		glob->error = EMPTY_LINE;
 	ft_strdel(&glob->line);
 	return (1);

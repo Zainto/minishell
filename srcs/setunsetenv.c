@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 03:53:26 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 20:10:44 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char		*ms_getenv(t_prgm *glob, char *name)
 
 	if (!name || !glob->env)
 	{
-		glob->error = NULL_ARG;
+		glob->error = NULL_ARG_PASSED;
 		return (NULL);
 	}
 	if ((node = ft_lstfind(glob->env, name, varcmp)))
