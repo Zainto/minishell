@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 14:17:06 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 13:24:31 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 03:45:11 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ int			split_input(t_prgm *glob)
 	if (writer(glob, glob->line, &glob->tab.av, 0) == -1)
 		return (glob->error == FAILED_MALLOC);
 	glob->tab.av[glob->tab.ac] = NULL;
-	return (1);
+	return (0);
 }

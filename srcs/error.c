@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 11:25:23 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 07:10:59 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 22:16:07 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ void	error_manager(t_prgm *glob)
 		ft_dprintf(2, "minishell: %s\n", glob->error_str[id]);
 	else
 		ft_dprintf(2, "minishell: %s: %s\n"
-				, glob->error_str[id], glob->tab.av[0]);
+				, glob->error_str[id], glob->tab.av[glob->tab.id]);
 	glob->error = 0;
 }

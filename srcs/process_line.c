@@ -6,11 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 06:56:17 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 03:45:39 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
+#include <fcntl.h>
 
 static int	replacer_var(t_prgm *glob, t_list *node, int index)
 {
@@ -102,15 +104,18 @@ int			replace_home(t_prgm *glob)
 int			process_line(t_prgm *glob)
 {
 	ft_freetab(&glob->tab.av);
-	ft_strdel(&glob->line);
+	ft_bzero(&glob->tab, sizeof(t_tab));
 	ft_putstr("$> ");
 	if (ft_getdelim(0, &glob->line, '\n') != 1)
 		return (glob->error = FAILED_READ);
-	if (ft_strequ(glob->line, "(null)"))
-		return (1);
 	if (replace_variable(glob))
 		return (glob->error);
 	if (replace_home(glob))
 		return (glob->error);
-	return (split_input(glob));
+	if (*glob->line && split_input(glob) < 0)
+		return (glob->error);
+	if (!glob->tab.ac)
+		glob->error = EMPTY_LINE;
+	ft_strdel(&glob->line);
+	return (1);
 }

@@ -6,11 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 04:09:44 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 02:35:54 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 int			generate_exec(t_prgm *glob, char *path)
 {
@@ -24,6 +26,7 @@ int			generate_exec(t_prgm *glob, char *path)
 		return (glob->error = FAILED_MALLOC);
 	while (tab[index])
 		ft_dirlist(&glob->exec, tab[index++]);
+	ft_freetab(&tab);
 	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
 
 }
@@ -42,7 +45,7 @@ int			execinit(t_prgm *glob)
 	return (0);
 }
 
-static int	variabletolist(t_prgm *glob, char *env)
+int			variabletolist(t_prgm *glob, t_list **envl, char *env)
 {
 	t_list		*node;
 	t_variable	variable;
@@ -55,20 +58,39 @@ static int	variabletolist(t_prgm *glob, char *env)
 		return (glob->error = FAILED_MALLOC);
 	if (!(node = ft_lstnew(&variable, sizeof(t_variable))))
 		return (glob->error = FAILED_MALLOC);
-	ft_lstadd(&glob->env, node);
+	ft_lstadd(envl, node);
+	return (0);
+}
+
+int			basic_env(t_prgm *glob)
+{
+	char			*holder;
+
+	holder = get_home();
+	variabletolist(glob, &glob->env, holder);
+	ft_strdel(&holder);
+	ft_asprintf(&holder,"PATH=%s", get_path(glob));
+	variabletolist(glob, &glob->env, holder);
+	ft_strdel(&holder);
+	ft_asprintf(&holder, "PWD=%s", getcwd(NULL, 0));
+	variabletolist(glob, &glob->env, holder);
+	ft_strdel(&holder);
 	return (0);
 }
 
 int			envinit(t_prgm *glob, char **env)
 {
-	int		i;
+	int				i;
 
 	i = 0;
-	if (!env)
-		return ((glob->error = NULL_ARG));
-	while (env[i])
-		if (variabletolist(glob, env[i++]))
-			return (glob->error = FAILED_MALLOC);
+	if (!*env)
+		basic_env(glob);
+	else
+	{
+		while (env[i])
+			if (variabletolist(glob, &glob->env, env[i++]))
+				return (glob->error = FAILED_MALLOC);
+	}
 	return (0);
 }
 

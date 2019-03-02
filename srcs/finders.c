@@ -6,12 +6,20 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 04:23:54 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 06:24:06 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/01 16:55:13 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int		var_filter(void *data, void *to_find)
+{
+	t_variable *variable;
+
+	variable = data;
+	return (!ft_strequ(variable->name, (char *)to_find));
+
+}
 int		find_exec(void *data, void *to_find)
 {
 	t_status *exec;
@@ -30,7 +38,7 @@ int			varcmp(void *data, void *to_find)
 	return (ft_strequ(variable->name, (char *)to_find));
 }
 
-static void	print_variable(t_list *node)
+void	print_variable(t_list *node)
 {
 	t_variable	*variable;
 

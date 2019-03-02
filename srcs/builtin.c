@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 06:44:50 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 03:27:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,23 @@ int				echo(t_prgm *glob)
 
 static int		move(t_prgm *glob, char *path)
 {
+	char		*tmp[3];
+	void		*holder;
+
 	if (!access(path, F_OK + R_OK + X_OK))
 	{
 		if (chdir(path) < 0)
 			return (glob->error = WRONG_CD_TYPE);
-		replace_env(glob->env, "OLDPWD", ms_getenv(glob, "PWD"));
-		replace_env(glob->env, "PWD", path);
+		holder = glob->tab.av;
+		glob->tab.ac = 3;
+		tmp[1] = "OLDPWD";
+		tmp[2] = ms_getenv(glob, "PWD");
+		glob->tab.av = tmp;
+		ms_setenv(glob);
+		tmp[1] = "PWD";
+		tmp[2] = path;
+		ms_setenv(glob);
+		glob->tab.av = holder;
 		return (0);
 	}
 	return (glob->error = WRONG_CD_PATH);

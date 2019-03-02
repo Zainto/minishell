@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 07:11:52 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 03:53:26 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int			ms_setenv(t_prgm *glob)
 	t_list	*node;
 	t_variable	template;
 
-	if (glob->tab.ac != 3)
-		return (glob->error = WRONG_ARG_NUM);
 	if (replace_env(glob->env, glob->tab.av[1], glob->tab.av[2]))
 		return (0);
 	template.name = ft_strdup(glob->tab.av[1]);
@@ -76,6 +74,6 @@ int			ms_unsetenv(t_prgm *glob)
 		return (glob->error = TOO_FEW_ARGS);
 	i = 1;
 	while (glob->tab.av[i])
-		ft_lstremove_if (&glob->env, glob->tab.av[i], varcmp, variable_delete);
+		ft_lstremove_if(&glob->env, glob->tab.av[i++], varcmp, variable_delete);
 	return (0);
 }

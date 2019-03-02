@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/01 07:10:23 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/02 01:50:11 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,40 @@
 # define WRONG_EXIT_ARGS -10
 # define WRONG_CD_TYPE -11
 # define WRONG_ARG_NUM -12
+# define WRONG_ARG_ENV_U -13
+# define EMPTY_LINE 1
 # define DEFAULT_PATH "/etc/paths"
-
+# define ENVLDEL 1
+# define EXECDEL 2
 typedef struct	s_prgm	t_prgm;
+typedef int		(*t_built)(t_prgm *);
 
 typedef struct		s_builtin
 {
-	char	*name;
-	int		(*builtin)(t_prgm *);
+	char			*name;
+	t_built			builtin;
 }					t_builtin;
 
 typedef struct 		s_variable
 {
-	char	*name;
-	char	*data;
+	char			*name;
+	char			*data;
 }					t_variable;
 
 typedef struct		s_tab
 {
-	int		ac;
-	int		id;
-	char	**av;
+	int				ac;
+	int				id;
+	char			**av;
 }					t_tab;
 
 typedef struct		s_local
 {
-	t_list		*envl;
-	t_list		*exec;
-	char		**envt;
+	unsigned int	to_del;
+	t_list			*envl;
+	t_list			*exec;
+	char			*path;
+	char			**envt;
 }					t_local;
 
 typedef enum		e_error
@@ -73,6 +79,7 @@ typedef enum		e_error
 	E_WRONG_EXIT_ARGS = WRONG_EXIT_ARGS,
 	E_WRONG_CD_TYPE = WRONG_CD_TYPE,
 	E_WRONG_ARG_NUM = WRONG_ARG_NUM,
+	E_WRONG_ARG_ENV_U = WRONG_ARG_ENV_U,
 }					t_error;
 
 struct 				s_prgm
@@ -84,7 +91,7 @@ struct 				s_prgm
 	t_error			error;
 	int				status;
 	t_builtin		builtin[6];
-	const char		*error_str[13];
+	const char		*error_str[14];
 };
 
 int					initialization(t_prgm *glob, char **env);
@@ -99,13 +106,18 @@ void				init_builtin(t_prgm *glob);
 
 int					get_exec(t_prgm *glob, char *path);
 char				*ms_getenv(t_prgm *glob, char *name);
+int					variabletolist(t_prgm *glob, t_list **envl, char *env);
 void				variable_delete(void *data);
 int					ms_setenv(t_prgm *glob);
 int					replace_env(t_list *env, char *to_find, char *data);
 int					ms_unsetenv(t_prgm *glob);
 int					print_env(t_prgm *glob);
 
+char				*get_path(t_prgm *glob);
+char				*get_home(void);
 
+void				print_variable(t_list *node);
+int					var_filter(void *data, void *to_find);
 int					process_line(t_prgm *glob);
 int					replace_variable(t_prgm *glob);
 int					replace_home(t_prgm *glob);
@@ -115,8 +127,9 @@ int					ms_env(t_prgm *glob);
 int					echo(t_prgm *glob);
 int					change_directory(t_prgm *glob);
 int					ms_exit(t_prgm *glob);
+int					env_option(t_prgm *glob, t_local *local);
 int					builtins_exec(t_prgm *glob);
-int					launcher(t_prgm *glob, t_status *exec, char **env);
+int					launcher(t_prgm *glob, char *exec, char **env);
 
 int					find_exec(void *data, void *to_find);
 int					varcmp(void *data, void *to_find);
