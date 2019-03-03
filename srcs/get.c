@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 01:44:00 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 21:48:12 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/03 01:12:02 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,29 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <pwd.h>
+
+static int	construct_exit(t_prgm *glob, int result)
+{
+	if (result == 0)
+		return (1);
+	glob->error = FAILED_MALLOC;
+	return (0);
+}
+
+char		*get_home(void)
+{
+	struct passwd	*uid;
+	uid_t			id;
+	char			*home;
+
+	home = NULL;
+	id = getuid();
+	uid = getpwuid(id);
+	if (ft_asprintf(&home, "HOME=%s",uid->pw_dir) < 0)
+		return (NULL);
+	return (home);
+}
 
 static char	*construct_path(t_prgm *glob, int fd, char *previous)
 {
