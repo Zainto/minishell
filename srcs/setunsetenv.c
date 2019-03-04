@@ -6,25 +6,11 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:32:46 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:37:00 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char		*ms_getenv(t_prgm *glob, char *name)
-{
-	t_list		*node;
-
-	if (!name || !glob->env)
-	{
-		glob->error = NULL_ARG_PASSED;
-		return (NULL);
-	}
-	if ((node = ft_lstfind(glob->env, name, varcmp)))
-		return (((t_variable *)node->data)->data);
-	return (NULL);
-}
 
 int			replace_env(t_list *env, char *to_find, char *data)
 {
@@ -41,19 +27,71 @@ int			replace_env(t_list *env, char *to_find, char *data)
 	return (0);
 }
 
-int			ms_setenv(t_prgm *glob)
+int			check_env(t_prgm *glob)
+{
+	char	**av;
+
+	if (glob->tab.ac == 1)
+		return (1);
+	av = &glob->tab.av[1];
+	while (*av)
+	{
+		if (ft_strchr(*av, '='))
+			av++;
+		else if (av[1])
+			av += 2;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+int			variabletolist(t_prgm *glob, t_list **envl, char *env)
 {
 	t_list		*node;
-	t_variable	template;
+	t_variable	variable;
+	int			eq;
 
-	if (replace_env(glob->env, glob->tab.av[1], glob->tab.av[2]))
+	eq = ft_strcspn(env, "=");
+	variable.name = ft_strsub(env, 0, eq);
+	variable.data = ft_strsub(env, eq + 1, ft_strlen(env + eq));
+	if (replace_env(*envl, variable.name, variable.data))
+	{
+		ft_strdel(&variable.name);
+		ft_strdel(&variable.data);
 		return (0);
-	template.name = ft_strdup(glob->tab.av[1]);
-	template.data = ft_strdup(glob->tab.av[2]);
-	if (!(node = ft_lstnew(&template, sizeof(t_variable))))
+	}
+	if (!variable.name || !variable.data)
 		return (glob->error = FAILED_MALLOC);
-	ft_lstaddback(&glob->env, node);
+	if (!(node = ft_lstnew(&variable, sizeof(t_variable))))
+		return (glob->error = FAILED_MALLOC);
+	ft_lstadd(envl, node);
 	return (0);
+}
+
+int			ms_setenv(t_prgm *glob)
+{
+	char	*holder;
+	char	**av;
+
+	if (check_env(glob))
+		return (glob->error = WRONG_ARG_NUM);
+	holder = NULL;
+	av = &glob->tab.av[1];
+	while (*av && !glob->error)
+	{
+		if(ft_strchr(*av, '='))
+			holder = ft_strdup(*av++);
+		else
+		{
+			if (ft_asprintf(&holder, "%s=%s", av[0], av[1]) < 0)
+				return (glob->error = FAILED_MALLOC);
+			av += 2;
+		}
+		variabletolist(glob, &glob->env, holder);
+		ft_strdel(&holder);
+	}
+	return (glob->error);
 }
 
 void		variable_delete(void *data)
@@ -65,16 +103,4 @@ void		variable_delete(void *data)
 		ft_strdel(&tmp->name);
 	if (tmp->data)
 		ft_strdel(&tmp->data);
-}
-
-int			ms_unsetenv(t_prgm *glob)
-{
-	int		i;
-
-	if (glob->tab.ac < 2)
-		return (glob->error = TOO_FEW_ARGS);
-	i = 1;
-	while (glob->tab.av[i])
-		ft_lstremove_if(&glob->env, glob->tab.av[i++], varcmp, variable_delete);
-	return (0);
 }

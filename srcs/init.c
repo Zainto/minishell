@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:40:37 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:35:10 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int			generate_exec(t_prgm *glob, char *path)
 	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
 }
 
+
 int			execinit(t_prgm *glob)
 {
 	char	*path;
@@ -43,21 +44,19 @@ int			execinit(t_prgm *glob)
 	return (0);
 }
 
-int			variabletolist(t_prgm *glob, t_list **envl, char *env)
+void		init_builtin(t_prgm *glob)
 {
-	t_list		*node;
-	t_variable	variable;
-	int			eq;
-
-	eq = ft_strcspn(env, "=");
-	variable.name = ft_strsub(env, 0, eq);
-	variable.data = ft_strsub(env, eq + 1, ft_strlen(env + eq));
-	if (!variable.name || !variable.data)
-		return (glob->error = FAILED_MALLOC);
-	if (!(node = ft_lstnew(&variable, sizeof(t_variable))))
-		return (glob->error = FAILED_MALLOC);
-	ft_lstadd(envl, node);
-	return (0);
+	glob->builtin[0].name = "echo";
+	glob->builtin[0].builtin = echo;
+	glob->builtin[1].name = "cd";
+	glob->builtin[1].builtin = change_directory;
+	glob->builtin[2].name = "setenv";
+	glob->builtin[2].builtin = ms_setenv;
+	glob->builtin[3].name = "unsetenv";
+	glob->builtin[3].builtin = ms_unsetenv;
+	glob->builtin[4].name = "exit";
+	glob->builtin[4].builtin = ms_exit;
+	glob->builtin[5].name = NULL;
 }
 
 int			envinit(t_prgm *glob, char **env)

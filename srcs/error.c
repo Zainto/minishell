@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 11:25:23 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 16:14:15 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:35:06 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void	error_manager(t_prgm *glob)
 		ft_dprintf(2, "%s: %s: %s\n", *errstr, errstr[errno], glob->tab.av[id]);
 	else if (errno >= 2 && errno <= 5)
 	{
-		ft_dprintf(2, "%s: %s\n", errstr, errstr[errno]);
+		ft_dprintf(2, "%s: %s\n", *errstr, errstr[errno]);
 		ms_exit(glob);
 	}
 	else if (errno >= 6 && errno <= 14)
-		ft_dprintf(2, "%s: %s\n", errstr, errstr[errno]);
+		ft_dprintf(2, "%s: %s\n", *errstr, errstr[errno]);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 16:46:46 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 20:50:28 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,22 @@ static int		move(t_prgm *glob, char *path)
 int				change_directory(t_prgm *glob)
 {
 	char	*path;
+	char	*av;
 
 	if (glob->tab.ac > 2)
 		return (glob->error = WRONG_CD_ARGS);
 	path = NULL;
+	av = glob->tab.av[1];
 	if (glob->tab.ac == 1)
 		path = ft_strdup(ms_getenv(glob, "HOME"));
-	else if (ft_strequ(glob->tab.av[1], "-"))
+	else if (ft_strnequ(av, "-/", 2))
+		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "OLDPWD"), av + 2);
+	else if (ft_strequ(av, "-"))
 		path = ft_strdup(ms_getenv(glob, "OLDPWD"));
-	else if (glob->tab.av[1][0] == '/' || ft_strnequ(glob->tab.av[1], "./", 2))
+	else if (*av == '/' || ft_strnequ(av, "./", 2))
 		path = ft_strdup(glob->tab.av[1]);
 	else
-		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
+		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), av);
 	if (!path)
 		return (glob->error = FAILED_MALLOC);
 	move(glob, path);
@@ -97,17 +101,14 @@ int				change_directory(t_prgm *glob)
 	return (glob->error);
 }
 
-void			init_builtin(t_prgm *glob)
+int				ms_unsetenv(t_prgm *glob)
 {
-	glob->builtin[0].name = "echo";
-	glob->builtin[0].builtin = echo;
-	glob->builtin[1].name = "cd";
-	glob->builtin[1].builtin = change_directory;
-	glob->builtin[2].name = "setenv";
-	glob->builtin[2].builtin = ms_setenv;
-	glob->builtin[3].name = "unsetenv";
-	glob->builtin[3].builtin = ms_unsetenv;
-	glob->builtin[4].name = "exit";
-	glob->builtin[4].builtin = ms_exit;
-	glob->builtin[5].name = NULL;
+	int		i;
+
+	if (glob->tab.ac < 2)
+		return (glob->error = TOO_FEW_ARGS);
+	i = 1;
+	while (glob->tab.av[i])
+		ft_lstremove_if(&glob->env, glob->tab.av[i++], varcmp, variable_delete);
+	return (0);
 }

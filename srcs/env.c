@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:40:19 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:07:07 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ int		env_setup(t_prgm *glob, t_local *local)
 {
 	if (glob->tab.ac == 1 && ft_strequ(glob->tab.av[0], "env"))
 		return (print_env(glob));
-	else if (ft_strequ(glob->tab.av[0], "env"))
+	if (ft_strequ(glob->tab.av[0], "env"))
 	{
 		glob->tab.id = 1;
-		env_option(glob, local);
+		env_options(glob, local);
 	}
 	if (!glob->error)
 	{

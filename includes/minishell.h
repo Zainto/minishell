@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:51:12 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:06:55 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int						varcmp(void *data, void *to_find);
 
 int						process_line(t_prgm *glob);
 int						env_handeler(t_prgm *glob);
-int						env_option(t_prgm *glob, t_local *local);
+int						env_options(t_prgm *glob, t_local *local);
 int						builtins_exec(t_prgm *glob);
 int						launcher(t_prgm *glob, char *exec, char **env);
 void					error_manager(t_prgm *glob);

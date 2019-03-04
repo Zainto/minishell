@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 14:17:06 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:33:50 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:05:02 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	parser(t_prgm *glob, const char *str)
 
 	if (glob->error)
 		return (glob->error);
-	while (ft_strchr(SPACE"=", *str) && *str)
+	while (ft_strchr(SPACE, *str) && *str)
 		str++;
 	if (*str == '\0')
 		return (0);
@@ -40,7 +40,7 @@ static int	parser(t_prgm *glob, const char *str)
 		return (1 + parser(glob, str + index + 2));
 	}
 	else
-		while (!ft_strchr(SPACE"=", *str) && *str)
+		while (!ft_strchr(SPACE, *str) && *str)
 			str++;
 	return (1 + parser(glob, str));
 }
@@ -49,7 +49,7 @@ static int	writer(t_prgm *glob, char const *str, char ***tab, int word)
 {
 	int		i;
 
-	while (ft_strchr(SPACE"=", *str) && *str)
+	while (ft_strchr(SPACE, *str) && *str)
 		str++;
 	if (*str == '\0')
 		return (1);
@@ -61,8 +61,8 @@ static int	writer(t_prgm *glob, char const *str, char ***tab, int word)
 	}
 	else
 	{
-		i = ft_strcspn(str, SPACE"=");
-		tab[0][word] = ft_strsub(str, *str == '=' ? 1 : 0, i);
+		i = ft_strcspn(str, SPACE);
+		tab[0][word] = ft_strsub(str, 0, i);
 	}
 	if (writer(glob, str + i, tab, word + 1) == 1)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 01:44:00 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:26:30 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 20:37:25 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,18 @@ char		*get_path(t_prgm *glob)
 	if (close(fd) == -1)
 		glob->error = FAILED_CLOSE;
 	return (path);
+}
+
+char		*ms_getenv(t_prgm *glob, char *name)
+{
+	t_list		*node;
+
+	if (!name || !glob->env)
+	{
+		glob->error = NULL_ARG_PASSED;
+		return (NULL);
+	}
+	if ((node = ft_lstfind(glob->env, name, varcmp)))
+		return (((t_variable *)node->data)->data);
+	return (NULL);
 }

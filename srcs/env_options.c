@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:21:05 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 21:26:41 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int		env_u(t_prgm *glob, t_local *local, int id)
 	return (id);
 }
 
-int		env_option(t_prgm *glob, t_local *local)
+int		env_options(t_prgm *glob, t_local *local)
 {
 	int		id;
 
@@ -64,5 +64,5 @@ int		env_option(t_prgm *glob, t_local *local)
 	if (!glob->tab.av[id])
 		return (0);
 	glob->tab.id = id;
-	return (env_option(glob, local));
+	return (env_options(glob, local));
 }
