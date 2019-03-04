@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 01:44:00 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/03 01:12:02 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:26:30 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char		*get_home(void)
 	home = NULL;
 	id = getuid();
 	uid = getpwuid(id);
-	if (ft_asprintf(&home, "HOME=%s",uid->pw_dir) < 0)
+	if (ft_asprintf(&home, "HOME=%s", uid->pw_dir) < 0)
 		return (NULL);
 	return (home);
 }
@@ -45,9 +45,9 @@ static char	*construct_path(t_prgm *glob, int fd, char *previous)
 	int		result;
 
 	if ((result = ft_getdelim(fd, &tmp, '\n')) <= 0)
-		return (construct_exit(glob, result)? previous : NULL);
+		return (construct_exit(glob, result) ? previous : NULL);
 	path = NULL;
-	ft_asprintf(&path,"%s%s:", previous ? previous : "", tmp);
+	ft_asprintf(&path, "%s%s:", previous ? previous : "", tmp);
 	if (!path)
 	{
 		glob->error = FAILED_MALLOC;
@@ -58,7 +58,7 @@ static char	*construct_path(t_prgm *glob, int fd, char *previous)
 	return (construct_path(glob, fd, path));
 }
 
-char	*get_path(t_prgm *glob)
+char		*get_path(t_prgm *glob)
 {
 	int		fd;
 	char	*path;

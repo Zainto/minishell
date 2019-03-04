@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 01:21:06 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:21:05 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		varcopy(void *dest, void *source)
 
 	dst = dest;
 	src = source;
-	if(!(dst->name = ft_strdup(src->name)))
+	if (!(dst->name = ft_strdup(src->name)))
 		return (-1);
 	if (!(dst->data = ft_strdup(src->data)))
 		return (-1);
@@ -35,6 +35,8 @@ int		env_i(t_prgm *glob, t_local *local, int id)
 	local->to_del |= ENVLDEL;
 	while (ft_strchr(glob->tab.av[id], '='))
 		variabletolist(glob, &local->envl, glob->tab.av[id++]);
+	if (!glob->tab.av[id])
+		glob->error = EMPTY_LINE;
 	return (id);
 }
 

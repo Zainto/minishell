@@ -6,13 +6,12 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 21:41:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:40:37 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
-#include <unistd.h>
 
 int			generate_exec(t_prgm *glob, char *path)
 {
@@ -28,7 +27,6 @@ int			generate_exec(t_prgm *glob, char *path)
 		ft_dirlist(&glob->exec, tab[index++]);
 	ft_freetab(&tab);
 	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
-
 }
 
 int			execinit(t_prgm *glob)
@@ -59,22 +57,6 @@ int			variabletolist(t_prgm *glob, t_list **envl, char *env)
 	if (!(node = ft_lstnew(&variable, sizeof(t_variable))))
 		return (glob->error = FAILED_MALLOC);
 	ft_lstadd(envl, node);
-	return (0);
-}
-
-int			basic_env(t_prgm *glob)
-{
-	char			*holder;
-
-	holder = get_home();
-	variabletolist(glob, &glob->env, holder);
-	ft_strdel(&holder);
-	ft_asprintf(&holder,"PATH=%s", get_path(glob));
-	variabletolist(glob, &glob->env, holder);
-	ft_strdel(&holder);
-	ft_asprintf(&holder, "PWD=%s", getcwd(NULL, 0));
-	variabletolist(glob, &glob->env, holder);
-	ft_strdel(&holder);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 12:46:16 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:33:03 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	replacer_var(t_prgm *glob, t_list *node, int index)
 		diff = len + index + 1;
 		ft_asprintf(&tmp, "%.*s%s%s"
 					, len, glob->line, holder->data, &glob->line[diff]);
-		if(!tmp)
+		if (!tmp)
 			return (glob->error = FAILED_MALLOC);
 	}
 	ft_strdel(&glob->line);
@@ -47,12 +47,12 @@ int			replace_variable(t_prgm *glob)
 	char	*to_find;
 	t_list	*node;
 
-	if(!glob->line)
+	if (!glob->line)
 		return (glob->error = NULL_ARG_PASSED);
 	str = glob->line;
 	while (*str)
 	{
-		if(*str++ == '$')
+		if (*str++ == '$')
 		{
 			to_find = ft_strsub(str, 0, ft_strcspn(str, " "));
 			node = ft_lstfind(glob->env, to_find, varcmp);
@@ -75,7 +75,7 @@ static int	replacer_home(t_prgm *glob, int id)
 	home = ms_getenv(glob, "HOME");
 	res = NULL;
 	str = glob->line;
-	if(ft_asprintf(&res, "%.*s%s%s", id, str, home, str + id + 1) < 0)
+	if (ft_asprintf(&res, "%.*s%s%s", id, str, home, str + id + 1) < 0)
 		return (glob->error = FAILED_MALLOC);
 	ft_strdel(&glob->line);
 	glob->line = res;
@@ -91,11 +91,11 @@ int			replace_home(t_prgm *glob)
 		return (glob->error = NULL_ARG_PASSED);
 	str = glob->line;
 	id = 0;
-	while(str[id])
+	while (str[id])
 	{
-		if(str[id] == '~' && (id == 0 || str[id - 1] == ' '))
+		if (str[id] == '~' && (id == 0 || str[id - 1] == ' '))
 		{
-			if(replacer_home(glob, id))
+			if (replacer_home(glob, id))
 				return (glob->error);
 			str = glob->line;
 			id++;

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 03:27:09 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 16:46:46 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,15 @@ int				change_directory(t_prgm *glob)
 		return (glob->error = WRONG_CD_ARGS);
 	path = NULL;
 	if (glob->tab.ac == 1)
-		ft_asprintf(&path, "%s", ms_getenv(glob, "HOME"));
-	else if (glob->tab.av[1][0] != '/')
-		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
-	else
+		path = ft_strdup(ms_getenv(glob, "HOME"));
+	else if (ft_strequ(glob->tab.av[1], "-"))
+		path = ft_strdup(ms_getenv(glob, "OLDPWD"));
+	else if (glob->tab.av[1][0] == '/' || ft_strnequ(glob->tab.av[1], "./", 2))
 		path = ft_strdup(glob->tab.av[1]);
+	else
+		ft_asprintf(&path, "%s/%s", ms_getenv(glob, "PWD"), glob->tab.av[1]);
+	if (!path)
+		return (glob->error = FAILED_MALLOC);
 	move(glob, path);
 	ft_strdel(&path);
 	return (glob->error);

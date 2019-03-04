@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 20:10:44 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:32:46 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,15 @@ int			replace_env(t_list *env, char *to_find, char *data)
 
 int			ms_setenv(t_prgm *glob)
 {
-	t_list	*node;
+	t_list		*node;
 	t_variable	template;
 
 	if (replace_env(glob->env, glob->tab.av[1], glob->tab.av[2]))
 		return (0);
 	template.name = ft_strdup(glob->tab.av[1]);
 	template.data = ft_strdup(glob->tab.av[2]);
-	node = ft_lstnew(&template, sizeof(t_variable));
+	if (!(node = ft_lstnew(&template, sizeof(t_variable))))
+		return (glob->error = FAILED_MALLOC);
 	ft_lstaddback(&glob->env, node);
 	return (0);
 }

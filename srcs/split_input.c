@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/26 14:17:06 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/02 20:11:26 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 17:33:50 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	checker(const char *str)
 {
 	int		index;
 
-	if (*str =='\"')
+	if (*str == '\"')
 		index = ft_strcspn(str + 1, "\"");
 	else
 		index = ft_strcspn(str + 1, "\'");
@@ -37,7 +37,7 @@ static int	parser(t_prgm *glob, const char *str)
 	{
 		if ((index = checker(str)) == -1)
 			return (glob->error = UNCLOSED_COMMA);
-		return (1 + parser(glob, str + index  + 2));
+		return (1 + parser(glob, str + index + 2));
 	}
 	else
 		while (!ft_strchr(SPACE"=", *str) && *str)
