@@ -1,5 +1,2 @@
-[submodule "libft"]
-	path = libft
-	url = https://github.com/Zainto/libft.git
 [submodule "Submod"]
 	url = https://github.com/cempassi/libft
