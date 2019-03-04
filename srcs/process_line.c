@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:33:03 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 18:45:22 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,23 @@ int			replace_variable(t_prgm *glob)
 	return (0);
 }
 
-static int	replacer_home(t_prgm *glob, int id)
+static int	replacer_home(t_prgm *glob, int id, int flag)
 {
-	char	*home;
+	char	*tmp;
 	char	*res;
 	char	*str;
+	int		diff;
 
-	home = ms_getenv(glob, "HOME");
 	res = NULL;
 	str = glob->line;
-	if (ft_asprintf(&res, "%.*s%s%s", id, str, home, str + id + 1) < 0)
+	diff = flag == 0 ? 1 : 2;
+	if (flag == 0)
+		tmp = ms_getenv(glob, "HOME");
+	if (flag == 1)
+		tmp = ms_getenv(glob, "PWD");
+	if (flag == 2)
+		tmp = ms_getenv(glob, "OLDPWD");
+	if (ft_asprintf(&res, "%.*s%s%s", id, str, tmp, str + id + diff) < 0)
 		return (glob->error = FAILED_MALLOC);
 	ft_strdel(&glob->line);
 	glob->line = res;
@@ -86,6 +93,7 @@ int			replace_home(t_prgm *glob)
 {
 	char	*str;
 	int		id;
+	int		ret;
 
 	if (!glob->line)
 		return (glob->error = NULL_ARG_PASSED);
@@ -94,12 +102,13 @@ int			replace_home(t_prgm *glob)
 	while (str[id])
 	{
 		if (str[id] == '~' && (id == 0 || str[id - 1] == ' '))
-		{
-			if (replacer_home(glob, id))
-				return (glob->error);
-			str = glob->line;
-			id++;
-		}
+			ret = replacer_home(glob, id, 0);
+		else if (ft_strequ(&str[id], "~+") && (id == 0 || str[id - 1] == ' '))
+			ret = replacer_home(glob, id, 1);
+		else if (ft_strequ(&str[id], "~-") && (id == 0 || str[id - 1] == ' '))
+			ret = replacer_home(glob, id, 2);
+		str = glob->line;
+		id++;
 		id += ft_strcspn(&str[id], "~");
 	}
 	return (0);
