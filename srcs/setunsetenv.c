@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 21:37:00 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 23:46:40 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			ms_setenv(t_prgm *glob)
 	av = &glob->tab.av[1];
 	while (*av && !glob->error)
 	{
-		if(ft_strchr(*av, '='))
+		if (ft_strchr(*av, '='))
 			holder = ft_strdup(*av++);
 		else
 		{

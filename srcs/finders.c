@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 04:23:54 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 17:23:14 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 22:03:38 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ void	print_variable(t_list *node)
 	ft_printf("%s=%s\n", variable->name, variable->data);
 }
 
-int		print_env(t_prgm *glob)
+int		print_env(t_list *env)
 {
-	ft_lstiter(glob->env, print_variable);
+	ft_lstiter(env, print_variable);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 21:06:55 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 23:41:26 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,21 @@
 # define FAILED_OPEN -3
 # define FAILED_CLOSE -4
 # define FAILED_READ -5
-# define UNCLOSED_COMMA -6
-# define WRONG_CD_ARGS -7
-# define TOO_FEW_ARGS -8
-# define WRONG_CD_PATH -9
-# define WRONG_EXIT_ARGS -10
-# define WRONG_CD_TYPE -11
-# define WRONG_ARG_NUM -12
-# define WRONG_ARG_ENV_U -13
-# define NULL_ARG_PASSED -14
-# define EMPTY_LINE -15
+# define FAILED_GETPWUID -6
+# define UNCLOSED_COMMA -7
+# define WRONG_CD_ARGS -8
+# define TOO_FEW_ARGS -9
+# define WRONG_CD_PATH -10
+# define WRONG_EXIT_ARGS -11
+# define WRONG_CD_TYPE -12
+# define WRONG_ARG_NUM -13
+# define WRONG_ARG_ENV_U -14
+# define NULL_ARG_PASSED -15
+# define EMPTY_LINE -16
 # define DEFAULT_PATH "/etc/paths"
 # define ENVLDEL 1
 # define EXECDEL 2
+# define OPW "OLDPWD"
 
 typedef struct s_prgm	t_prgm;
 typedef int				(*t_built)(t_prgm *);
@@ -74,6 +76,7 @@ typedef enum			e_error
 	E_FAILED_OPEN = FAILED_OPEN,
 	E_FAILED_CLOSE = FAILED_CLOSE,
 	E_FAILED_READ = FAILED_READ,
+	E_FAILED_GETPWUID = FAILED_GETPWUID,
 	E_UNCLOSED_COMMA = UNCLOSED_COMMA,
 	E_WRONG_CD_ARGS = WRONG_CD_ARGS,
 	E_TOO_FEW_ARGS = TOO_FEW_ARGS,
@@ -95,28 +98,28 @@ struct					s_prgm
 	t_error				error;
 	int					status;
 	t_builtin			builtin[6];
-	const char			*errstr[15];
+	const char			*errstr[16];
 };
 
 char					*get_path(t_prgm *glob);
 char					*read_path(t_prgm *glob);
-char					*get_home(void);
+char					*get_home(t_prgm *glob);
 
 void					init_error(t_prgm *glob);
 int						envinit(t_prgm *glob, char **env);
 int						execinit(t_prgm *glob);
 int						generate_exec(t_prgm *glob, char *path);
 void					init_builtin(t_prgm *glob);
-int						basic_env(t_prgm *glob);
+int						basic_env(t_prgm *glob, t_list **env);
 int						split_input(t_prgm *glob);
 int						initialization(t_prgm *glob, char **env);
 
 int						get_exec(t_prgm *glob, char *path);
-char					*ms_getenv(t_prgm *glob, char *name);
+char					*ms_getenv(t_prgm *glob, t_list *env, char *name);
 int						variabletolist(t_prgm *glob, t_list **envl, char *env);
 void					variable_delete(void *data);
 int						replace_env(t_list *env, char *to_find, char *data);
-int						print_env(t_prgm *glob);
+int						print_env(t_list *env);
 
 void					print_variable(t_list *node);
 int						var_filter(void *data, void *to_find);

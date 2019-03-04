@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 21:26:41 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 23:16:28 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,35 @@ int		env_u(t_prgm *glob, t_local *local, int id)
 	return (id);
 }
 
+int		env_simple(t_prgm *glob, t_local *local, int id)
+{
+	if (glob->tab.ac > 1)
+	{
+		local->to_del |= ENVLDEL;
+		if (!(local->envl = ft_lstcpy(glob->env, varcopy)))
+			return (glob->error = FAILED_MALLOC);
+		while (ft_strchr(glob->tab.av[id], '='))
+			variabletolist(glob, &local->envl, glob->tab.av[id++]);
+	}
+	else
+		local->envl = glob->env;
+	if (glob->tab.av[id])
+		return (id);
+	glob->status = print_env(local->envl);
+	return (id);
+}
+
 int		env_options(t_prgm *glob, t_local *local)
 {
-	int		id;
-
-	id = glob->tab.id;
-	if (!glob->tab.av[id] || glob->tab.av[id][0] != '-')
+	if (ft_strchr(glob->tab.av[glob->tab.id], '=') || glob->tab.ac == 1)
+		glob->tab.id = env_simple(glob, local, glob->tab.id);
+	if (local->to_del)
 		return (0);
-	if (ft_strequ(glob->tab.av[id], "-i"))
-		id = env_i(glob, local, ++id);
-	if (ft_strequ(glob->tab.av[id], "-u"))
-		id = env_u(glob, local, ++id);
-	if (!glob->tab.av[id])
+	if (ft_strequ(glob->tab.av[glob->tab.id], "-u"))
+		glob->tab.id = env_u(glob, local, ++glob->tab.id);
+	if (ft_strequ(glob->tab.av[glob->tab.id], "-i"))
+		glob->tab.id = env_i(glob, local, ++glob->tab.id);
+	if (!glob->tab.av[glob->tab.id] || glob->tab.av[glob->tab.id][0] != '-')
 		return (0);
-	glob->tab.id = id;
 	return (env_options(glob, local));
 }

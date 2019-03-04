@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 21:35:10 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 23:27:00 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int			generate_exec(t_prgm *glob, char *path)
 	ft_freetab(&tab);
 	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
 }
-
 
 int			execinit(t_prgm *glob)
 {
@@ -64,14 +63,14 @@ int			envinit(t_prgm *glob, char **env)
 	int				i;
 
 	i = 0;
-	if (!env || !*env)
-		basic_env(glob);
-	else
+	if (env)
 	{
 		while (env[i])
 			if (variabletolist(glob, &glob->env, env[i++]))
 				return (glob->error = FAILED_MALLOC);
 	}
+	if (basic_env(glob, &glob->env))
+		return (glob->error = FAILED_MALLOC);
 	return (0);
 }
 

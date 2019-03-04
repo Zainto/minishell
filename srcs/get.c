@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 01:44:00 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 20:37:25 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/04 23:42:19 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	construct_exit(t_prgm *glob, int result)
 	return (0);
 }
 
-char		*get_home(void)
+char		*get_home(t_prgm *glob)
 {
 	struct passwd	*uid;
 	uid_t			id;
@@ -32,9 +32,16 @@ char		*get_home(void)
 
 	home = NULL;
 	id = getuid();
-	uid = getpwuid(id);
-	if (ft_asprintf(&home, "HOME=%s", uid->pw_dir) < 0)
+	if (!(uid = getpwuid(id)))
+	{
+		glob->error = FAILED_GETPWUID;
 		return (NULL);
+	}
+	if (ft_asprintf(&home, "HOME=%s", uid->pw_dir) < 0)
+	{
+		glob->error = FAILED_MALLOC;
+		return (NULL);
+	}
 	return (home);
 }
 
@@ -74,16 +81,16 @@ char		*get_path(t_prgm *glob)
 	return (path);
 }
 
-char		*ms_getenv(t_prgm *glob, char *name)
+char		*ms_getenv(t_prgm *glob, t_list *env, char *name)
 {
 	t_list		*node;
 
-	if (!name || !glob->env)
+	if (!name || !env)
 	{
 		glob->error = NULL_ARG_PASSED;
 		return (NULL);
 	}
-	if ((node = ft_lstfind(glob->env, name, varcmp)))
+	if ((node = ft_lstfind(env, name, varcmp)))
 		return (((t_variable *)node->data)->data);
 	return (NULL);
 }
