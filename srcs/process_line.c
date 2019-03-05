@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:35:10 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:26:11 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ static int	replacer_home(t_prgm *glob, int id, int flag)
 	str = glob->line;
 	diff = flag == 0 ? 1 : 2;
 	if (flag == 0)
-		tmp = ms_getenv(glob, glob->env, "HOME");
+		tmp = ms_getenv(glob, &glob->env, "HOME");
 	if (flag == 1)
-		tmp = ms_getenv(glob, glob->env, "PWD");
+		tmp = ms_getenv(glob, &glob->env, "PWD");
 	if (flag == 2)
-		tmp = ms_getenv(glob, glob->env, "OLDPWD");
+		tmp = ms_getenv(glob, &glob->env, "OLDPWD");
 	if (ft_asprintf(&res, "%.*s%s%s", id, str, tmp, str + id + diff) < 0)
 		return (glob->error = FAILED_MALLOC);
 	ft_strdel(&glob->line);

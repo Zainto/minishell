@@ -6,41 +6,12 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:43:56 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:16:39 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
-#include <unistd.h>
-
-int		basic_env(t_prgm *glob, t_list **env)
-{
-	char			*holder;
-
-	if (!ms_getenv(glob, *env, "HOME"))
-	{
-		if (!(holder = get_home(glob)))
-			return (glob->error = FAILED_MALLOC);
-		variabletolist(glob, env, holder);
-		ft_strdel(&holder);
-	}
-	if (!ms_getenv(glob, *env, "PATH"))
-	{
-		if (!(ft_asprintf(&holder, "PATH=%s", get_path(glob))))
-			return (glob->error = FAILED_MALLOC);
-		variabletolist(glob, &glob->env, holder);
-		ft_strdel(&holder);
-	}
-	if (!ms_getenv(glob, *env, "PWD"))
-	{
-		if (!(ft_asprintf(&holder, "PWD=%s", getcwd(NULL, 0))))
-			return (glob->error = FAILED_MALLOC);
-		variabletolist(glob, &glob->env, holder);
-		ft_strdel(&holder);
-	}
-	return (0);
-}
 
 char	**lsttotab(t_list *list)
 {

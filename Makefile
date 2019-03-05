@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/02 02:04:21 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/05 00:25:37 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ INCT += unit.h
 
 SRCM += main.c
 
+SRCS += basic_setup.c
 SRCS += builtin.c
 SRCS += env.c
 SRCS += env_options.c

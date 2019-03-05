@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 11:25:23 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:40:27 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:51:35 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_error(t_prgm *glob)
 	glob->errstr[6] = "System Failure on Getpwuid";
 	glob->errstr[7] = "Unclosed comma";
 	glob->errstr[8] = "Cd takes only one argument";
-	glob->errstr[9] = "Not enough Argumends";
+	glob->errstr[9] = "Not enough Arguments";
 	glob->errstr[10] = "Invalid path";
 	glob->errstr[11] = "Too many arguments";
 	glob->errstr[12] = "Is not a directory";

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:46:40 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:49:26 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,6 @@ int			replace_env(t_list *env, char *to_find, char *data)
 		ft_strdel(&tmp->data);
 		tmp->data = ft_strdup(data);
 		return (1);
-	}
-	return (0);
-}
-
-int			check_env(t_prgm *glob)
-{
-	char	**av;
-
-	if (glob->tab.ac == 1)
-		return (1);
-	av = &glob->tab.av[1];
-	while (*av)
-	{
-		if (ft_strchr(*av, '='))
-			av++;
-		else if (av[1])
-			av += 2;
-		else
-			return (1);
 	}
 	return (0);
 }
@@ -69,6 +50,25 @@ int			variabletolist(t_prgm *glob, t_list **envl, char *env)
 	return (0);
 }
 
+int			check_env(t_prgm *glob)
+{
+	char	**av;
+
+	if (glob->tab.ac == 1)
+		return (1);
+	av = &glob->tab.av[1];
+	while (*av)
+	{
+		if (ft_strchr(*av, '='))
+			av++;
+		else if (av[1])
+			av += 2;
+		else
+			return (1);
+	}
+	return (0);
+}
+
 int			ms_setenv(t_prgm *glob)
 {
 	char	*holder;
@@ -80,6 +80,8 @@ int			ms_setenv(t_prgm *glob)
 	av = &glob->tab.av[1];
 	while (*av && !glob->error)
 	{
+		if (ft_strequ(av[0], "PATH"))
+			execinit(glob);
 		if (ft_strchr(*av, '='))
 			holder = ft_strdup(*av++);
 		else

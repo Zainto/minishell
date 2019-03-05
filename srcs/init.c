@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:27:00 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:23:49 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ int			envinit(t_prgm *glob, char **env)
 			if (variabletolist(glob, &glob->env, env[i++]))
 				return (glob->error = FAILED_MALLOC);
 	}
-	if (basic_env(glob, &glob->env))
-		return (glob->error = FAILED_MALLOC);
 	return (0);
 }
 

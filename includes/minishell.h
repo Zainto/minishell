@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:41:26 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 00:23:42 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,11 @@ int						envinit(t_prgm *glob, char **env);
 int						execinit(t_prgm *glob);
 int						generate_exec(t_prgm *glob, char *path);
 void					init_builtin(t_prgm *glob);
-int						basic_env(t_prgm *glob, t_list **env);
 int						split_input(t_prgm *glob);
 int						initialization(t_prgm *glob, char **env);
 
 int						get_exec(t_prgm *glob, char *path);
-char					*ms_getenv(t_prgm *glob, t_list *env, char *name);
+char					*ms_getenv(t_prgm *glob, t_list **env, char *name);
 int						variabletolist(t_prgm *glob, t_list **envl, char *env);
 void					variable_delete(void *data);
 int						replace_env(t_list *env, char *to_find, char *data);
@@ -140,4 +139,8 @@ int						change_directory(t_prgm *glob);
 int						ms_exit(t_prgm *glob);
 int						ms_unsetenv(t_prgm *glob);
 int						ms_setenv(t_prgm *glob);
+
+int						home_checker(t_prgm *glob, t_list **env);
+int						path_checker(t_prgm *glob, t_list **env);
+int						pwd_checker(t_prgm *glob, t_list **env);
 #endif
