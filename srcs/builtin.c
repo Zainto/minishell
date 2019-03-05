@@ -6,12 +6,11 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 01:00:27 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 03:56:05 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <unistd.h>
 #include <stdlib.h>
 
 int				ms_exit(t_prgm *glob)
@@ -22,6 +21,8 @@ int				ms_exit(t_prgm *glob)
 		return (glob->error = WRONG_EXIT_ARGS);
 	if (glob->tab.ac > 1 && (glob->error <= -7 || glob->error == 0))
 		exitcode = ft_atoi(glob->tab.av[1]);
+	else if (glob->tab.ac == 1)
+		exitcode = 0;
 	else
 		exitcode = -1;
 	ft_lstdel(&glob->env, variable_delete);
@@ -49,57 +50,6 @@ int				echo(t_prgm *glob)
 	if (!n)
 		ft_putchar('\n');
 	return (0);
-}
-
-static int		move(t_prgm *glob, char *path)
-{
-	char		*tmp[4];
-	void		*holder;
-
-	if (!access(path, F_OK + R_OK + X_OK))
-	{
-		tmp[3] = NULL;
-		if (chdir(path) < 0)
-			return (glob->error = WRONG_CD_TYPE);
-		holder = glob->tab.av;
-		glob->tab.ac = 3;
-		tmp[1] = OPW;
-		tmp[2] = ms_getenv(glob, &glob->env, "PWD");
-		glob->tab.av = tmp;
-		ms_setenv(glob);
-		tmp[1] = "PWD";
-		tmp[2] = path;
-		ms_setenv(glob);
-		glob->tab.av = holder;
-		return (0);
-	}
-	return (glob->error = WRONG_CD_PATH);
-}
-
-int				change_directory(t_prgm *glob)
-{
-	char	*path;
-	char	*av;
-
-	if (glob->tab.ac > 2)
-		return (glob->error = WRONG_CD_ARGS);
-	path = NULL;
-	av = glob->tab.av[1];
-	if (glob->tab.ac == 1)
-		path = ft_strdup(ms_getenv(glob, &glob->env, "HOME"));
-	else if (ft_strnequ(av, "-/", 2))
-		ft_asprintf(&path, "%s/%s", ms_getenv(glob, &glob->env, OPW), &av[2]);
-	else if (ft_strequ(av, "-"))
-		path = ft_strdup(ms_getenv(glob, &glob->env, OPW));
-	else if (*av == '/' || ft_strnequ(av, "./", 2))
-		path = ft_strdup(glob->tab.av[1]);
-	else
-		ft_asprintf(&path, "%s/%s", ms_getenv(glob, &glob->env, "PWD"), av);
-	if (!path)
-		return (glob->error = FAILED_MALLOC);
-	move(glob, path);
-	ft_strdel(&path);
-	return (glob->error);
 }
 
 int				ms_unsetenv(t_prgm *glob)

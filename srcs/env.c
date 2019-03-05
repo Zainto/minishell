@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:16:39 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 02:53:21 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	**lsttotab(t_list *list)
 	int			lstlen;
 	t_variable	*tmp;
 
+	if (!list)
+		return (NULL);
 	lstlen = ft_lstlen(list);
 	index = 0;
 	tab = malloc(sizeof(char *) * (lstlen + 1));
@@ -62,7 +64,7 @@ int		env_setup(t_prgm *glob, t_local *local)
 		if (!(local->to_del & EXECDEL))
 			local->exec = glob->exec;
 	}
-	if (local->to_del & ENVLDEL)
+	if (local->to_del & ENVLDEL || local->to_del & NOPARAM)
 		ft_lstdel(&local->envl, variable_delete);
 	return (glob->error);
 }

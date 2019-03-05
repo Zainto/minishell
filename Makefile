@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/05 00:25:37 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/05 03:56:26 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCM += main.c
 
 SRCS += basic_setup.c
 SRCS += builtin.c
+SRCS += change_directory.c
 SRCS += env.c
 SRCS += env_options.c
 SRCS += error.c
@@ -51,7 +52,6 @@ SRCS += init.c
 SRCS += get.c
 SRCS += launcher.c
 SRCS += process_line.c
-SRCS += read_path.c
 SRCS += setunsetenv.c
 SRCS += split_input.c
 

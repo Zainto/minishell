@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 11:25:23 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:51:35 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 03:24:42 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_error(t_prgm *glob)
 	glob->errstr[13] = "Wrong number of Arguments";
 	glob->errstr[14] = "No arguments to unset";
 	glob->errstr[15] = "Null argument passed";
+	glob->errstr[16] = "Argument not found in PWD";
 }
 
 void	error_manager(t_prgm *glob)

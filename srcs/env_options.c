@@ -6,13 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/04 23:16:28 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 02:35:27 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		varcopy(void *dest, void *source)
+int		varcpy(void *dest, void *source)
 {
 	t_variable		*dst;
 	t_variable		*src;
@@ -42,11 +42,16 @@ int		env_i(t_prgm *glob, t_local *local, int id)
 
 int		env_u(t_prgm *glob, t_local *local, int id)
 {
-	local->to_del |= ENVLDEL;
-	if (!(local->envl = ft_lstcpy(glob->env, varcopy)))
-		return (glob->error = FAILED_MALLOC);
-	local->envl = ft_lstfilter(local->envl, glob->tab.av[id], var_filter);
+	if (!glob->tab.av[id])
+	{
+		glob->error = WRONG_ARG_NUM;
+		return (id);
+	}
+	local->to_del |= NOPARAM;
+	local->envl = ft_lstfilter(glob->env, glob->tab.av[id], var_filter, varcpy);
 	++id;
+	if (!glob->tab.av[id])
+		glob->status = 1;
 	return (id);
 }
 
@@ -55,7 +60,7 @@ int		env_simple(t_prgm *glob, t_local *local, int id)
 	if (glob->tab.ac > 1)
 	{
 		local->to_del |= ENVLDEL;
-		if (!(local->envl = ft_lstcpy(glob->env, varcopy)))
+		if (!(local->envl = ft_lstcpy(glob->env, varcpy)))
 			return (glob->error = FAILED_MALLOC);
 		while (ft_strchr(glob->tab.av[id], '='))
 			variabletolist(glob, &local->envl, glob->tab.av[id++]);
@@ -70,15 +75,17 @@ int		env_simple(t_prgm *glob, t_local *local, int id)
 
 int		env_options(t_prgm *glob, t_local *local)
 {
+	if (local->to_del & NOPARAM)
+		return (0);
 	if (ft_strchr(glob->tab.av[glob->tab.id], '=') || glob->tab.ac == 1)
 		glob->tab.id = env_simple(glob, local, glob->tab.id);
-	if (local->to_del)
-		return (0);
-	if (ft_strequ(glob->tab.av[glob->tab.id], "-u"))
+	else if (ft_strequ(glob->tab.av[glob->tab.id], "-u"))
 		glob->tab.id = env_u(glob, local, ++glob->tab.id);
-	if (ft_strequ(glob->tab.av[glob->tab.id], "-i"))
+	else if (ft_strequ(glob->tab.av[glob->tab.id], "-i"))
 		glob->tab.id = env_i(glob, local, ++glob->tab.id);
-	if (!glob->tab.av[glob->tab.id] || glob->tab.av[glob->tab.id][0] != '-')
+	if (!glob->tab.av[glob->tab.id])
+		return (0);
+	if (glob->tab.av[glob->tab.id][0] != '-')
 		return (0);
 	return (env_options(glob, local));
 }

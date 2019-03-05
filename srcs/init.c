@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:23:49 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 03:55:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int			execinit(t_prgm *glob)
 
 	if (glob->exec)
 		ft_dirdel(&glob->exec);
-	if (!(path = read_path(glob)))
-		return (glob->error);
+	if (!(path = ft_strdup(ms_getenv(glob, &glob->env, "PATH"))))
+		path = get_path(glob);
 	if (generate_exec(glob, path))
 		return (glob->error);
 	ft_strdel(&path);

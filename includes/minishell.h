@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:23:42 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 03:24:41 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@
 # define WRONG_ARG_NUM -13
 # define WRONG_ARG_ENV_U -14
 # define NULL_ARG_PASSED -15
-# define EMPTY_LINE -16
+# define NOT_IN_PWD -16
+# define EMPTY_LINE -17
 # define DEFAULT_PATH "/etc/paths"
 # define ENVLDEL 1
 # define EXECDEL 2
+# define NOPARAM 4
 # define OPW "OLDPWD"
 
 typedef struct s_prgm	t_prgm;
@@ -86,6 +88,7 @@ typedef enum			e_error
 	E_WRONG_ARG_NUM = WRONG_ARG_NUM,
 	E_WRONG_ARG_ENV_U = WRONG_ARG_ENV_U,
 	E_NULL_ARG = NULL_ARG_PASSED,
+	E_NOT_IN_PWD = NOT_IN_PWD,
 	E_EMPTY_LINE = EMPTY_LINE,
 }						t_error;
 
@@ -98,7 +101,7 @@ struct					s_prgm
 	t_error				error;
 	int					status;
 	t_builtin			builtin[6];
-	const char			*errstr[16];
+	const char			*errstr[17];
 };
 
 char					*get_path(t_prgm *glob);

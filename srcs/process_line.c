@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:26:11 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/05 02:44:34 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,24 +92,24 @@ static int	replacer_home(t_prgm *glob, int id, int flag)
 int			replace_home(t_prgm *glob)
 {
 	char	*str;
-	int		id;
+	int		i;
 	int		ret;
 
 	if (!glob->line)
 		return (glob->error = NULL_ARG_PASSED);
 	str = glob->line;
-	id = 0;
-	while (str[id])
+	i = 0;
+	while (str[i])
 	{
-		if (str[id] == '~' && (id == 0 || str[id - 1] == ' '))
-			ret = replacer_home(glob, id, 0);
-		else if (ft_strequ(&str[id], "~+") && (id == 0 || str[id - 1] == ' '))
-			ret = replacer_home(glob, id, 1);
-		else if (ft_strequ(&str[id], "~-") && (id == 0 || str[id - 1] == ' '))
-			ret = replacer_home(glob, id, 2);
+		if (ft_strnequ(&str[i], "~-", 2) && (i == 0 || str[i - 1] == ' '))
+			ret = replacer_home(glob, i, 2);
+		else if (ft_strnequ(&str[i], "~+", 2) && (i == 0 || str[i - 1] == ' '))
+			ret = replacer_home(glob, i, 1);
+		else if (str[i] == '~' && (i == 0 || str[i - 1] == ' '))
+			ret = replacer_home(glob, i, 0);
 		str = glob->line;
-		id++;
-		id += ft_strcspn(&str[id], "~");
+		i++;
+		i += ft_strcspn(&str[i], "~");
 	}
 	return (0);
 }
