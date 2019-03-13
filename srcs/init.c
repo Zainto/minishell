@@ -6,14 +6,14 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/07 16:34:09 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:11:51 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-int			generate_exec(t_prgm *glob, char *path)
+static int		generate_exec(t_prgm *glob, char *path)
 {
 	char		**tab;
 	int			index;
@@ -29,7 +29,7 @@ int			generate_exec(t_prgm *glob, char *path)
 	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
 }
 
-int			execinit(t_prgm *glob)
+int				execinit(t_prgm *glob)
 {
 	char	*path;
 
@@ -43,7 +43,7 @@ int			execinit(t_prgm *glob)
 	return (0);
 }
 
-void		init_builtin(t_prgm *glob)
+static void		init_builtin(t_prgm *glob)
 {
 	glob->builtin[0].name = "echo";
 	glob->builtin[0].builtin = echo;
@@ -58,7 +58,7 @@ void		init_builtin(t_prgm *glob)
 	glob->builtin[5].name = NULL;
 }
 
-int			envinit(t_prgm *glob, char **env)
+static int		envinit(t_prgm *glob, char **env)
 {
 	int				i;
 	int				shlvl;
@@ -84,7 +84,7 @@ int			envinit(t_prgm *glob, char **env)
 	return (0);
 }
 
-int			initialization(t_prgm *glob, char **env)
+int				initialization(t_prgm *glob, char **env)
 {
 	ft_bzero(glob, sizeof(t_prgm));
 	init_error(glob);

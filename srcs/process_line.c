@@ -6,13 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 01:59:31 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:12:12 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		display_prompt(t_prgm *glob)
+static void	display_prompt(t_prgm *glob)
 {
 	char	*path;
 

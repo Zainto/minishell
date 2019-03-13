@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 03:34:25 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:13:53 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,7 @@ char					*read_path(t_prgm *glob);
 char					*get_home(t_prgm *glob);
 
 void					init_error(t_prgm *glob);
-int						envinit(t_prgm *glob, char **env);
 int						execinit(t_prgm *glob);
-int						generate_exec(t_prgm *glob, char *path);
-void					init_builtin(t_prgm *glob);
 int						split_input(t_prgm *glob);
 int						initialization(t_prgm *glob, char **env);
 
@@ -146,7 +143,7 @@ int						echo(t_prgm *glob);
 int						change_directory(t_prgm *glob);
 int						ms_exit(t_prgm *glob);
 int						ms_unsetenv(t_prgm *glob);
+int						var_checker(t_prgm *glob, t_list **env, char *name);
 int						ms_setenv(t_prgm *glob);
 
-int						var_checker(t_prgm *glob, t_list **env, char *name);
 #endif

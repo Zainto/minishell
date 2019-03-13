@@ -6,13 +6,13 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 03:50:09 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:09:25 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		varcpy(void *dest, void *source)
+static int	varcpy(void *dest, void *source)
 {
 	t_variable		*dst;
 	t_variable		*src;
@@ -26,7 +26,7 @@ int		varcpy(void *dest, void *source)
 	return (0);
 }
 
-int		env_i(t_prgm *glob, t_local *local, int id)
+static int	env_i(t_prgm *glob, t_local *local, int id)
 {
 	local->to_del |= ENVLDEL;
 	while (ft_strchr(glob->tab.av[id], '='))
@@ -36,7 +36,7 @@ int		env_i(t_prgm *glob, t_local *local, int id)
 	return (id);
 }
 
-int		env_u(t_prgm *glob, t_local *local, int id)
+static int	env_u(t_prgm *glob, t_local *local, int id)
 {
 	if (!glob->tab.av[id])
 	{
@@ -51,7 +51,7 @@ int		env_u(t_prgm *glob, t_local *local, int id)
 	return (id);
 }
 
-int		env_simple(t_prgm *glob, t_local *local, int id)
+static int	env_simple(t_prgm *glob, t_local *local, int id)
 {
 	if (glob->tab.ac > 1)
 	{
@@ -69,7 +69,7 @@ int		env_simple(t_prgm *glob, t_local *local, int id)
 	return (id);
 }
 
-int		env_options(t_prgm *glob, t_local *local)
+int			env_options(t_prgm *glob, t_local *local)
 {
 	if (local->to_del & NOPARAM || ft_strequ(glob->tab.av[glob->tab.id], "--"))
 		return (0);

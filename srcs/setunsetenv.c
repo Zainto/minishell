@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 02:52:38 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:12:45 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			variabletolist(t_prgm *glob, t_list **envl, char *env)
 	return (0);
 }
 
-int			check_env(t_prgm *glob)
+static int	check_env(t_prgm *glob)
 {
 	char	**av;
 

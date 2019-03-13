@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 03:55:34 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 03:44:15 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 04:07:48 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	move(t_prgm *glob, char *path)
 	return (glob->error = WRONG_CD_PATH);
 }
 
-char		*path_swap(t_prgm *glob)
+static char	*path_swap(t_prgm *glob)
 {
 	char	*pos;
 	char	*tmp;
@@ -63,7 +63,7 @@ char		*path_swap(t_prgm *glob)
 	return (tmp);
 }
 
-char		*path_generator(t_prgm *glob)
+static char	*path_generator(t_prgm *glob)
 {
 	char	*path;
 	char	*av;
