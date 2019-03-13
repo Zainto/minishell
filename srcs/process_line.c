@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 04:17:45 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 04:12:12 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 05:17:26 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,8 @@ int			process_line(t_prgm *glob)
 	display_prompt(glob);
 	if (ft_getdelim(0, &glob->line, '\n') != 1)
 		glob->error = FAILED_READ;
-	if (!glob->error)
-	{
-		replace_variable(glob);
-		replace_home(glob);
-		split_input(glob);
-	}
+	if (!split_input(glob))
+		replacer(glob);
 	if (!glob->tab.ac && !glob->error)
 		glob->error = EMPTY_LINE;
 	ft_strdel(&glob->line);

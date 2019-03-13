@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/07 19:37:10 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 06:50:32 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@ static int		duplicate_av(t_prgm *glob, int ac, char **av)
 static void		non_interactive(t_prgm *glob, int ac, char **av)
 {
 	duplicate_av(glob, ac, av);
+	replacer(glob);
 	if (env_handeler(glob))
 		error_manager(glob);
-	ms_exit(glob);
+	ft_lstdel(&glob->env, variable_delete);
+	ft_freetab(&glob->tab.av);
+	ft_dirdel(&glob->exec);
 }
 
 static void		interactive(t_prgm *glob)

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 04:13:53 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 06:21:07 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,7 @@ int						print_env(t_list *env);
 
 void					print_variable(t_list *node);
 int						var_filter(void *data, void *to_find);
-int						replace_variable(t_prgm *glob);
-int						replace_home(t_prgm *glob);
+int						replacer(t_prgm *glob);
 int						find_ex(void *data, void *to_find);
 int						varcmp(void *data, void *to_find);
 
