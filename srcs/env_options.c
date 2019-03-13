@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/01 17:48:01 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/07 18:04:21 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 03:50:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		env_options(t_prgm *glob, t_local *local)
 	{
 		if (glob->tab.av[glob->tab.id][1] == 'u')
 			glob->tab.id = env_u(glob, local, ++glob->tab.id);
-		else if (glob->tab.av[glob->tab.id][1] ==  'i')
+		else if (glob->tab.av[glob->tab.id][1] == 'i')
 			glob->tab.id = env_i(glob, local, ++glob->tab.id);
 		else
 			return (glob->error = WRONG_ARG_ENV);

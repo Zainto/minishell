@@ -6,21 +6,32 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/13 03:46:03 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/13 03:56:16 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 NAMEDB = minishelldb
-NAMET = Unit
 LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libftdb.a
 
 CC = Clang
 CCD = Clang -g3
-COMPILE = $(CC) -c -g
+COMPILE = $(CC) -c
 DEBUG = $(CC) -g3 -c
 
+# Reset
+NC = \033[0m
+
+# Regular Colors
+BLACK = \033[0;30m
+RED = \033[0;31m
+GREEN = \033[32m
+YELLOW = \033[0;33m
+BLUE = \033[0;34m
+PURPLE = \033[0;35m
+CYAN = \033[0;36m
+WHITE = \033[0;37m
 MKDIR = mkdir -p
 CLEANUP = rm -rf
 
@@ -38,7 +49,6 @@ LPATH = libft/
 LIPATH = libft/includes/
 
 INCS += minishell.h
-INCT += unit.h
 
 SRCM += main.c
 
@@ -57,16 +67,6 @@ SRCS += setunsetenv.c
 SRCS += split_input.c
 SRCS += replace.c
 
-TEST += unit.c
-TEST += test_envinit.c
-TEST += test_execinit.c
-TEST += test_ft_getenv.c
-TEST += test_get_path.c
-TEST += test_generate_exec.c
-TEST += test_line_processing.c
-TEST += test_replace_variable.c
-TEST += test_replace_home.c
-
 DSYM += $(NAME).dSYM
 DSYM += $(NAMEDB).dSYM
 
@@ -74,10 +74,8 @@ OBJM = $(patsubst %.c, $(OPATH)%.o, $(SRCM))
 OBJMD = $(patsubst %.c, $(OPATH)db%.o, $(SRCM))
 OBJS = $(patsubst %.c, $(OPATH)%.o, $(SRCS))
 OBJD = $(patsubst %.c, $(OPATH)db%.o, $(SRCS))
-OBJT = $(patsubst %.c, $(OPATH)%.o, $(TEST))
 
 vpath %.c srcs
-vpath %.c test
 vpath %.h includes
 
 all : $(NAME)
@@ -85,29 +83,21 @@ all : $(NAME)
 run : $(NAME)
 	./$<
 	
-test: $(NAMET)
-	./$<
-
 debug : $(NAMEDB)
 	./$<
 
 #Normal compilation
-
 $(NAME): $(LIB) $(OPATH) $(OBJM) $(OBJS) $(INCS)
 	$(CC) -o $@ $(LIB) $(OBJS) $(OBJM)
+	printf "$(GREEN)$@ is ready.\n$(NC)"
 	
 $(OBJS) : $(OPATH)%.o : %.c $(INCS)
 	$(COMPILE) $(CFLAGS) $(IFLAGS) $< -o $@
+	printf "$(BLUE)Compiling $<\n$(NC)"
 
 $(OBJM) : $(OPATH)%.o : %.c $(INCS)
 	$(COMPILE) $(CFLAGS) $(IFLAGS) $< -o $@
-
-#Unit testing
-$(NAMET): $(LIB) $(OPATH) $(OBJS) $(OBJT)
-	$(CC)  -o $@ $(OBJS) $(LIB) $(OBJT)
-
-$(OBJT) : $(OPATH)%.o : %.c $(INCT)
-	$(DEBUG) $(CFLAGS) $(IFLAGS) $< -o $@
+	printf "$(BLUE)Compiling $<\n$(NC)"
 
 #Debug
 $(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJMD) $(INCS)
@@ -115,9 +105,11 @@ $(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJMD) $(INCS)
 	
 $(OBJD) : $(OPATH)db%.o : %.c $(INCS)
 	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@
+	printf "$(BLUE)Compiling $< for debug\n$(NC)"
 
 $(OBJMD) : $(OPATH)db%.o : %.c $(INCS)
 	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@
+	printf "$(BLUE)Compiling $< for debug\n$(NC)"
 
 #Libraries
 $(LIB) : FORCE
@@ -140,10 +132,10 @@ fclean : clean
 	$(CLEANUP) $(OPATH)
 	$(CLEANUP) $(NAME)
 	$(CLEANUP) $(NAMEDB)
-	$(CLEANUP) $(NAMET)
 
 re: fclean all
 
 FORCE :
 
 .PHONY: all clean fclean debug test FORCE
+.SILENT:

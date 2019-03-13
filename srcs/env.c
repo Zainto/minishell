@@ -6,14 +6,14 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/07 18:26:00 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 03:50:58 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-char	**lsttotab(t_list *list)
+char		**lsttotab(t_list *list)
 {
 	char		**tab;
 	int			index;
@@ -56,7 +56,7 @@ static int	builtins_exec(t_prgm *glob, t_local *local)
 	return (1);
 }
 
-int		env_setup(t_prgm *glob, t_local *local)
+int			env_setup(t_prgm *glob, t_local *local)
 {
 	if (ft_strequ(glob->tab.av[0], "env"))
 	{
@@ -67,7 +67,8 @@ int		env_setup(t_prgm *glob, t_local *local)
 	{
 		if (!local->envl && !(local->to_del & ENVLDEL))
 			local->envl = glob->env;
-		if (!(local->envt = lsttotab(local->envl)) && !(local->to_del & ENVLDEL))
+		if (!(local->envt = lsttotab(local->envl))
+				&& !(local->to_del & ENVLDEL))
 			glob->error = FAILED_MALLOC;
 		if (!(local->to_del & EXECDEL))
 			local->exec = glob->exec;
@@ -77,7 +78,7 @@ int		env_setup(t_prgm *glob, t_local *local)
 	return (glob->error);
 }
 
-int		env_handeler(t_prgm *glob)
+int			env_handeler(t_prgm *glob)
 {
 	t_local	loc;
 	t_list	*node;
