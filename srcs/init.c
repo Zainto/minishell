@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 03:55:09 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/07 16:34:09 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ void		init_builtin(t_prgm *glob)
 int			envinit(t_prgm *glob, char **env)
 {
 	int				i;
+	int				shlvl;
+	char			*holder;
 
 	i = 0;
 	if (env)
@@ -69,6 +71,16 @@ int			envinit(t_prgm *glob, char **env)
 			if (variabletolist(glob, &glob->env, env[i++]))
 				return (glob->error = FAILED_MALLOC);
 	}
+	if ((shlvl = ft_atoi(ms_getenv(glob, &glob->env, "SHLVL"))))
+	{
+		shlvl++;
+		holder = NULL;
+		ft_asprintf(&holder, "%s=%d", "SHLVL", shlvl);
+		variabletolist(glob, &glob->env, holder);
+		ft_strdel(&holder);
+	}
+	else
+		variabletolist(glob, &glob->env, "SHLVL=1");
 	return (0);
 }
 

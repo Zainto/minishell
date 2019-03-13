@@ -6,23 +6,26 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 03:55:34 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 03:56:02 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 03:44:15 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <limits.h>
 #include "minishell.h"
 
-static int		move(t_prgm *glob, char *path)
+static int	move(t_prgm *glob, char *path)
 {
 	char		*tmp[4];
 	void		*holder;
 
-	if (!access(path, F_OK + R_OK + X_OK))
+	if (!access(path, F_OK))
 	{
-		tmp[3] = NULL;
+		if (access(path, +(X_OK | R_OK)))
+			return (glob->error = CD_PERMISSION_DENIED);
 		if (chdir(path) < 0)
 			return (glob->error = WRONG_CD_TYPE);
+		tmp[3] = NULL;
 		holder = glob->tab.av;
 		glob->tab.ac = 3;
 		tmp[1] = OPW;
@@ -30,15 +33,16 @@ static int		move(t_prgm *glob, char *path)
 		glob->tab.av = tmp;
 		ms_setenv(glob);
 		tmp[1] = "PWD";
-		tmp[2] = path;
+		tmp[2] = getcwd(NULL, 0);
 		ms_setenv(glob);
+		ft_strdel(&tmp[2]);
 		glob->tab.av = holder;
 		return (0);
 	}
 	return (glob->error = WRONG_CD_PATH);
 }
 
-char			*path_swap(t_prgm *glob)
+char		*path_swap(t_prgm *glob)
 {
 	char	*pos;
 	char	*tmp;
@@ -59,14 +63,11 @@ char			*path_swap(t_prgm *glob)
 	return (tmp);
 }
 
-int				change_directory(t_prgm *glob)
+char		*path_generator(t_prgm *glob)
 {
 	char	*path;
 	char	*av;
 
-	if (glob->tab.ac > 3)
-		return (glob->error = WRONG_CD_ARGS);
-	path = NULL;
 	av = glob->tab.av[1];
 	if (glob->tab.ac == 1)
 		path = ft_strdup(ms_getenv(glob, &glob->env, "HOME"));
@@ -81,8 +82,23 @@ int				change_directory(t_prgm *glob)
 	else
 		ft_asprintf(&path, "%s/%s", ms_getenv(glob, &glob->env, "PWD"), av);
 	if (!path && !glob->error)
-		return (glob->error = FAILED_MALLOC);
-	move(glob, path);
-	ft_strdel(&path);
+	{
+		glob->error = FAILED_MALLOC;
+		return (NULL);
+	}
+	return (path);
+}
+
+int			change_directory(t_prgm *glob)
+{
+	char	*path;
+
+	if (glob->tab.ac > 3)
+		return (glob->error = WRONG_CD_ARGS);
+	if ((path = path_generator(glob)))
+	{
+		move(glob, path);
+		ft_strdel(&path);
+	}
 	return (glob->error);
 }

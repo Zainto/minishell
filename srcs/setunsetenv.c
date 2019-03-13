@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:49:26 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 02:52:38 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,6 @@ int			ms_setenv(t_prgm *glob)
 	av = &glob->tab.av[1];
 	while (*av && !glob->error)
 	{
-		if (ft_strequ(av[0], "PATH"))
-			execinit(glob);
 		if (ft_strchr(*av, '='))
 			holder = ft_strdup(*av++);
 		else
@@ -91,6 +89,8 @@ int			ms_setenv(t_prgm *glob)
 			av += 2;
 		}
 		variabletolist(glob, &glob->env, holder);
+		if (ft_strequ(av[0], "PATH"))
+			execinit(glob);
 		ft_strdel(&holder);
 	}
 	return (glob->error);

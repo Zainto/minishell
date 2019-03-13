@@ -6,29 +6,41 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 03:56:05 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 03:22:42 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-int				ms_exit(t_prgm *glob)
+static void		delete_glob(t_prgm *glob)
 {
-	int		exitcode;
-
-	if (glob->tab.ac > 2)
-		return (glob->error = WRONG_EXIT_ARGS);
-	if (glob->tab.ac > 1 && (glob->error <= -7 || glob->error == 0))
-		exitcode = ft_atoi(glob->tab.av[1]);
-	else if (glob->tab.ac == 1)
-		exitcode = 0;
-	else
-		exitcode = -1;
 	ft_lstdel(&glob->env, variable_delete);
 	ft_dirdel(&glob->exec);
 	ft_freetab(&glob->tab.av);
 	ft_strdel(&glob->line);
+}
+
+int				ms_exit(t_prgm *glob)
+{
+	int		exitcode;
+	int		index;
+
+	index = 0;
+	if (glob->tab.ac > 2)
+		return (glob->error = WRONG_EXIT_ARGS);
+	if (glob->tab.ac > 1 && (glob->error <= -7 || glob->error == 0))
+	{
+		while (glob->tab.av[1][index])
+			if (!ft_isdigit(glob->tab.av[1][index++]))
+				return (glob->error = EXIT_INT);
+		exitcode = ft_atoi(glob->tab.av[1]);
+	}
+	else if (glob->tab.ac == 1 && ft_strequ(glob->tab.av[0], "exit"))
+		exitcode = 0;
+	else
+		exitcode = -1;
+	delete_glob(glob);
 	exit(exitcode);
 	return (0);
 }

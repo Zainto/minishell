@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 03:24:41 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 03:34:25 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,12 @@
 # define WRONG_CD_TYPE -12
 # define WRONG_ARG_NUM -13
 # define WRONG_ARG_ENV_U -14
-# define NULL_ARG_PASSED -15
-# define NOT_IN_PWD -16
-# define EMPTY_LINE -17
+# define WRONG_ARG_ENV -15
+# define NULL_ARG_PASSED -16
+# define NOT_IN_PWD -17
+# define EXIT_INT -18
+# define CD_PERMISSION_DENIED -19
+# define EMPTY_LINE -20
 # define DEFAULT_PATH "/etc/paths"
 # define ENVLDEL 1
 # define EXECDEL 2
@@ -87,8 +90,11 @@ typedef enum			e_error
 	E_WRONG_CD_TYPE = WRONG_CD_TYPE,
 	E_WRONG_ARG_NUM = WRONG_ARG_NUM,
 	E_WRONG_ARG_ENV_U = WRONG_ARG_ENV_U,
+	E_WRONG_ARG_ENV = WRONG_ARG_ENV,
 	E_NULL_ARG = NULL_ARG_PASSED,
 	E_NOT_IN_PWD = NOT_IN_PWD,
+	E_EXIT_INT = EXIT_INT,
+	E_CD_PERMISSION_DENIED = CD_PERMISSION_DENIED,
 	E_EMPTY_LINE = EMPTY_LINE,
 }						t_error;
 
@@ -101,7 +107,7 @@ struct					s_prgm
 	t_error				error;
 	int					status;
 	t_builtin			builtin[6];
-	const char			*errstr[17];
+	const char			*errstr[20];
 };
 
 char					*get_path(t_prgm *glob);
@@ -133,7 +139,6 @@ int						varcmp(void *data, void *to_find);
 int						process_line(t_prgm *glob);
 int						env_handeler(t_prgm *glob);
 int						env_options(t_prgm *glob, t_local *local);
-int						builtins_exec(t_prgm *glob);
 int						launcher(t_prgm *glob, char *exec, char **env);
 void					error_manager(t_prgm *glob);
 
@@ -143,7 +148,5 @@ int						ms_exit(t_prgm *glob);
 int						ms_unsetenv(t_prgm *glob);
 int						ms_setenv(t_prgm *glob);
 
-int						home_checker(t_prgm *glob, t_list **env);
-int						path_checker(t_prgm *glob, t_list **env);
-int						pwd_checker(t_prgm *glob, t_list **env);
+int						var_checker(t_prgm *glob, t_list **env, char *name);
 #endif

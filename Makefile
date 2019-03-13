@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/05 03:56:26 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/13 03:46:03 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,9 @@ LIB = $(LPATH)libft.a
 LIBDB = $(LPATH)libftdb.a
 
 CC = Clang
+CCD = Clang -g3
 COMPILE = $(CC) -c -g
-DEBUG = $(CC) -g -c
+DEBUG = $(CC) -g3 -c
 
 MKDIR = mkdir -p
 CLEANUP = rm -rf
@@ -54,6 +55,7 @@ SRCS += launcher.c
 SRCS += process_line.c
 SRCS += setunsetenv.c
 SRCS += split_input.c
+SRCS += replace.c
 
 TEST += unit.c
 TEST += test_envinit.c
@@ -65,7 +67,8 @@ TEST += test_line_processing.c
 TEST += test_replace_variable.c
 TEST += test_replace_home.c
 
-DSYM = $(NAME).dSYM
+DSYM += $(NAME).dSYM
+DSYM += $(NAMEDB).dSYM
 
 OBJM = $(patsubst %.c, $(OPATH)%.o, $(SRCM))
 OBJMD = $(patsubst %.c, $(OPATH)db%.o, $(SRCM))
@@ -108,7 +111,7 @@ $(OBJT) : $(OPATH)%.o : %.c $(INCT)
 
 #Debug
 $(NAMEDB): $(LIBDB) $(OPATH) $(OBJD) $(OBJMD) $(INCS)
-	$(CC) $(DFLAGS) -o $@ $(LIBDB) $(OBJD) $(OBJMD)
+	$(CCD) $(DFLAGS) -o $@ $(LIBDB) $(OBJD) $(OBJMD)
 	
 $(OBJD) : $(OPATH)db%.o : %.c $(INCS)
 	$(DEBUG) $(DFLAGS) $(CFLAGS) $(IFLAGS) $< -o $@

@@ -6,14 +6,15 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 00:12:34 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/05 00:25:39 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 01:33:30 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <unistd.h>
+#include <limits.h>
 
-int			home_checker(t_prgm *glob, t_list **env)
+static int			home_checker(t_prgm *glob, t_list **env)
 {
 	char	*holder;
 
@@ -28,33 +29,69 @@ int			home_checker(t_prgm *glob, t_list **env)
 	return (0);
 }
 
-int			path_checker(t_prgm *glob, t_list **env)
+static int			path_checker(t_prgm *glob, t_list **env)
 {
+	char	*path;
 	char	*holder;
 
 	holder = NULL;
 	if (!ft_lstfind(*env, "PATH", varcmp))
 	{
-		if (!(ft_asprintf(&holder, "PATH=%s", get_path(glob))))
+		path = get_path(glob);
+		if (!(ft_asprintf(&holder, "PATH=%s", path)))
 			return (glob->error = FAILED_MALLOC);
 		variabletolist(glob, env, holder);
 		execinit(glob);
+		ft_strdel(&holder);
+		ft_strdel(&path);
+	}
+	return (0);
+}
+
+static int			oldpwd_checker(t_prgm *glob, t_list **env)
+{
+	char	*holder;
+	char	path[PATH_MAX];
+
+	holder = NULL;
+	if (!ft_lstfind(*env, OPW, varcmp))
+	{
+		if (!(ft_asprintf(&holder, "OLDPWD=%s", getcwd(path, PATH_MAX))))
+			return (glob->error = FAILED_MALLOC);
+		variabletolist(glob, env, holder);
 		ft_strdel(&holder);
 	}
 	return (0);
 }
 
-int			pwd_checker(t_prgm *glob, t_list **env)
+static int			pwd_checker(t_prgm *glob, t_list **env)
 {
 	char	*holder;
+	char	path[PATH_MAX];
 
 	holder = NULL;
 	if (!ft_lstfind(*env, "PWD", varcmp))
 	{
-		if (!(ft_asprintf(&holder, "PWD=%s", getcwd(NULL, 0))))
+		if (!(ft_asprintf(&holder, "PWD=%s", getcwd(path, PATH_MAX))))
 			return (glob->error = FAILED_MALLOC);
 		variabletolist(glob, env, holder);
 		ft_strdel(&holder);
 	}
 	return (0);
+}
+
+int					var_checker(t_prgm *glob, t_list **env, char *name)
+{
+	int		result;
+
+	result = 0;
+	if (ft_strequ(name, "HOME"))
+		result = home_checker(glob, env);
+	else if (ft_strequ(name, "PATH"))
+		result = path_checker(glob, env);
+	else if (ft_strequ(name, "PWD"))
+		result = pwd_checker(glob, env);
+	else if (ft_strequ(name, OPW))
+		result = oldpwd_checker(glob, env);
+	return (result);
 }
