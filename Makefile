@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/13 03:56:16 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/13 04:05:11 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,14 +124,17 @@ $(OPATH):
 clean :
 	$(MAKE) -C $(LPATH) clean
 	$(CLEANUP) $(OBJS)
+	$(CLEANUP) $(OBJM)
 	$(CLEANUP) $(OPATH)
+	printf "$(RED)All *.o files for $(NAME) removed\n$(NC)"
 	$(CLEANUP) $(DSYM)
+	printf "$(RED)All $(DSYM) removed\n$(NC)"
 
 fclean : clean
 	$(MAKE) -C $(LPATH) fclean
-	$(CLEANUP) $(OPATH)
 	$(CLEANUP) $(NAME)
 	$(CLEANUP) $(NAMEDB)
+	printf "$(RED)$(NAME) deleted\n$(NC)"
 
 re: fclean all
 
