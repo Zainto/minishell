@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 22:46:16 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 03:22:42 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:12:43 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 static void		delete_glob(t_prgm *glob)
 {
 	ft_lstdel(&glob->env, variable_delete);
-	ft_dirdel(&glob->exec);
 	ft_freetab(&glob->tab.av);
 	ft_strdel(&glob->line);
 }

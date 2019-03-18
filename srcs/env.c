@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 21:08:41 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 04:08:26 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:17:37 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,23 @@ static char	**lsttotab(t_list *list)
 	return (tab);
 }
 
+static int	local_exec(t_prgm *glob, t_local *local)
+{
+	char		**tab;
+	int			index;
+	char		*path;
+
+	if (!(path = ms_getenv(glob, &local->envl, "PATH")))
+		return (0);
+	index = 0;
+	if (!(tab = ft_strsplit(path, ":")))
+		return (glob->error = FAILED_MALLOC);
+	while (tab[index])
+		ft_dirlist(&local->exec, tab[index++]);
+	ft_freetab(&tab);
+	return (0);
+}
+
 static int	builtins_exec(t_prgm *glob, t_local *local)
 {
 	int		index;
@@ -48,6 +65,7 @@ static int	builtins_exec(t_prgm *glob, t_local *local)
 	{
 		if (ft_strequ(glob->builtin[index].name, glob->tab.av[0]))
 		{
+			ft_dirdel(&local->exec);
 			ft_freetab(&local->envt);
 			return (glob->builtin[index].builtin(glob));
 		}
@@ -70,8 +88,7 @@ static int	env_setup(t_prgm *glob, t_local *local)
 		if (!(local->envt = lsttotab(local->envl))
 				&& !(local->to_del & ENVLDEL))
 			glob->error = FAILED_MALLOC;
-		if (!(local->to_del & EXECDEL))
-			local->exec = glob->exec;
+		local_exec(glob, local);
 	}
 	if (local->to_del & ENVLDEL || local->to_del & NOPARAM)
 		ft_lstdel(&local->envl, variable_delete);
@@ -97,8 +114,7 @@ int			env_handeler(t_prgm *glob)
 		glob->error = launcher(glob, glob->tab.av[glob->tab.id], loc.envt);
 	else if (!glob->error)
 		glob->error = WRONG_COMMAND;
-	if (loc.to_del & EXECDEL)
-		ft_dirdel(&loc.exec);
+	ft_dirdel(&loc.exec);
 	ft_freetab(&loc.envt);
 	return (glob->error < 0 ? glob->error : 1);
 }

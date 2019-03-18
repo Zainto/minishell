@@ -6,40 +6,27 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/19 19:23:42 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 04:11:51 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:13:08 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
 
-static int		generate_exec(t_prgm *glob, char *path)
-{
-	char		**tab;
-	int			index;
-
-	if (!path)
-		return (glob->error = NULL_ARG_PASSED);
-	index = 0;
-	if (!(tab = ft_strsplit(path, ":")))
-		return (glob->error = FAILED_MALLOC);
-	while (tab[index])
-		ft_dirlist(&glob->exec, tab[index++]);
-	ft_freetab(&tab);
-	return (glob->error = glob->exec ? 0 : FAILED_MALLOC);
-}
-
 int				execinit(t_prgm *glob)
 {
 	char	*path;
+	char	*holder;
 
-	if (glob->exec)
-		ft_dirdel(&glob->exec);
-	if (!(path = ft_strdup(ms_getenv(glob, &glob->env, "PATH"))))
+	holder = NULL;
+	if (!(path = ms_getenv(glob, &glob->env, "PATH")))
+	{
 		path = get_path(glob);
-	if (generate_exec(glob, path))
-		return (glob->error);
-	ft_strdel(&path);
+		ft_asprintf(&holder, "PATH=%s", path);
+		variabletolist(glob, &glob->env, holder);
+		ft_strdel(&holder);
+		ft_strdel(&path);
+	}
 	return (0);
 }
 

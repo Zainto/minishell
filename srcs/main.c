@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:05 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 06:50:32 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:12:25 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static void		non_interactive(t_prgm *glob, int ac, char **av)
 		error_manager(glob);
 	ft_lstdel(&glob->env, variable_delete);
 	ft_freetab(&glob->tab.av);
-	ft_dirdel(&glob->exec);
 }
 
 static void		interactive(t_prgm *glob)

@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 01:42:38 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 06:20:10 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/13 10:30:31 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	replacer_var(t_prgm *glob, t_list *node, int index, char **str)
 	return (0);
 }
 
-int			replace_variable(t_prgm *glob, char **str)
+static int	replace_variable(t_prgm *glob, char **str)
 {
 	char	*to_find;
 	int		i;
@@ -116,6 +116,8 @@ int			replacer(t_prgm *glob)
 	int		index;
 
 	index = 1;
+	if (glob->tab.ac == 0)
+		return (glob->error = EMPTY_LINE);
 	while (glob->tab.av[index])
 	{
 		replace_variable(glob, &glob->tab.av[index]);

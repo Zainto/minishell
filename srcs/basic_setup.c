@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/05 00:12:34 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 01:33:30 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:03:11 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,6 @@ static int			home_checker(t_prgm *glob, t_list **env)
 			return (glob->error = FAILED_MALLOC);
 		variabletolist(glob, env, holder);
 		ft_strdel(&holder);
-	}
-	return (0);
-}
-
-static int			path_checker(t_prgm *glob, t_list **env)
-{
-	char	*path;
-	char	*holder;
-
-	holder = NULL;
-	if (!ft_lstfind(*env, "PATH", varcmp))
-	{
-		path = get_path(glob);
-		if (!(ft_asprintf(&holder, "PATH=%s", path)))
-			return (glob->error = FAILED_MALLOC);
-		variabletolist(glob, env, holder);
-		execinit(glob);
-		ft_strdel(&holder);
-		ft_strdel(&path);
 	}
 	return (0);
 }
@@ -87,8 +68,6 @@ int					var_checker(t_prgm *glob, t_list **env, char *name)
 	result = 0;
 	if (ft_strequ(name, "HOME"))
 		result = home_checker(glob, env);
-	else if (ft_strequ(name, "PATH"))
-		result = path_checker(glob, env);
 	else if (ft_strequ(name, "PWD"))
 		result = pwd_checker(glob, env);
 	else if (ft_strequ(name, OPW))

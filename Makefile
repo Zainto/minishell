@@ -6,7 +6,7 @@
 #    By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/26 23:18:40 by cempassi          #+#    #+#              #
-#    Updated: 2019/03/13 04:05:11 by cempassi         ###   ########.fr        #
+#    Updated: 2019/03/13 07:45:18 by cempassi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,13 +59,13 @@ SRCS += env.c
 SRCS += env_options.c
 SRCS += error.c
 SRCS += finders.c
-SRCS += init.c
 SRCS += get.c
+SRCS += init.c
 SRCS += launcher.c
 SRCS += process_line.c
+SRCS += replace.c
 SRCS += setunsetenv.c
 SRCS += split_input.c
-SRCS += replace.c
 
 DSYM += $(NAME).dSYM
 DSYM += $(NAMEDB).dSYM

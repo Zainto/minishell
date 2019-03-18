@@ -6,7 +6,7 @@
 /*   By: cempassi <cempassi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/11 20:45:03 by cempassi          #+#    #+#             */
-/*   Updated: 2019/03/13 06:21:07 by cempassi         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:12:02 by cempassi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ struct					s_prgm
 {
 	t_tab				tab;
 	t_list				*env;
-	t_list				*exec;
 	char				*line;
 	t_error				error;
 	int					status;
